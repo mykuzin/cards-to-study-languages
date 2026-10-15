@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Market research — Kartky</title>
+  <meta name="description" content="Competitor and market research for Kartky, a free Ukrainian-first vocabulary flashcard app: market size, competitor comparison, demand in Ukraine and the diaspora, learning science, and prioritized recommendations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Page-specific styles for research.html. Tokens, base, and topbar come from styles.css. */
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    .topbar { max-width: 1120px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px;
+      padding: 8px 14px; border-radius: 999px;
+      transition: background .15s, color .15s;
+    }
+    .back-link:hover { color: var(--ink); background: var(--surface-2); }
+    .back-link svg { width: 16px; height: 16px; }
+
+    main.r-main { max-width: 1120px; margin: 0 auto; padding: 8px 24px 80px; }
+
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+    a:hover { text-decoration-color: currentColor; }
+
+    /* ---------- Header ---------- */
+    .r-head { padding: 40px 0 32px; max-width: 760px; }
+    .eyebrow {
+      font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 14px;
+    }
+    .r-head h1 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -.02em;
+      margin: 0 0 14px;
+    }
+    .r-head h1 em { font-style: italic; color: var(--accent); }
+    .r-sub { margin: 0 0 18px; color: var(--muted); font-size: 18px; line-height: 1.5; }
+    .r-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .r-meta li {
+      font-size: 13px; color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+    }
+    .r-meta li.updated { background: var(--accent-soft); color: var(--accent); border-color: transparent; font-weight: 500; }
+
+    /* ---------- Key findings ---------- */
+    .findings { margin: 0 0 48px; }
+    .findings h2 {
+      font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin: 0 0 14px; font-family: var(--font-ui);
+    }
+    .findings ul {
+      list-style: none; margin: 0; padding: 0;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+    }
+    .finding {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 20px 22px 22px;
+    }
+    .finding .tag {
+      display: block; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--faint); margin-bottom: 10px;
+    }
+    .finding b {
+      display: block; font-family: var(--font-display); font-weight: 500;
+      font-size: 24px; line-height: 1.15; letter-spacing: -.01em; margin-bottom: 8px;
+    }
+    .finding p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
+    .finding.warn b { color: var(--learning); }
+    .finding.good b { color: var(--accent); }
+
+    /* ---------- Layout ---------- */
+    .r-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 56px; align-items: start; }
+
+    .toc { position: sticky; top: 24px; font-size: 14px; }
+    .toc h2 {
+      font-family: var(--font-ui); font-size: 12px; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--faint); margin: 0 0 10px;
+    }
+    .toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; }
+    .toc > ol > li { counter-increment: toc; }
+    .toc a {
+      display: block; padding: 6px 10px 6px 12px; color: var(--muted); text-decoration: none;
+      border-left: 2px solid var(--line); line-height: 1.35;
+    }
+    .toc > ol > li > a::before {
+      content: counter(toc, decimal-leading-zero); color: var(--faint);
+      font-variant-numeric: tabular-nums; margin-right: 8px; font-size: 12px;
+    }
+    .toc a:hover { color: var(--ink); border-left-color: var(--accent); }
+    .toc ol ol a { padding-left: 34px; font-size: 13px; }
+
+    /* ---------- Prose ---------- */
+    .content { min-width: 0; }
+    .content section { padding-bottom: 24px; }
+    .content section + section { border-top: 1px solid var(--line); padding-top: 40px; }
+    .content h2 {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; letter-spacing: -.015em;
+      margin: 0 0 20px; max-width: 30ch; scroll-margin-top: 24px;
+    }
+    .content h2 .num {
+      display: block; font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      letter-spacing: .08em; color: var(--faint); margin-bottom: 8px;
+    }
+    .content h3 {
+      font-family: var(--font-display); font-weight: 500;
+      font-size: 22px; line-height: 1.25; letter-spacing: -.01em;
+      margin: 36px 0 14px; max-width: 40ch; scroll-margin-top: 24px;
+    }
+    .content p, .content .prose-list { max-width: 70ch; line-height: 1.68; margin: 0 0 18px; }
+    .content p.lede { font-size: 18px; line-height: 1.65; }
+    .content strong { font-weight: 600; }
+    [id] { scroll-margin-top: 24px; }
+
+    .note {
+      max-width: 70ch; margin: 0 0 22px; padding: 14px 18px;
+      background: var(--surface-2); border-radius: var(--radius-sm);
+      border-left: 3px solid var(--learning);
+      font-size: 15px; line-height: 1.6; color: var(--ink);
+    }
+    .note b { color: var(--learning); font-weight: 600; }
+
+    .pullquote {
+      max-width: 60ch; margin: 8px 0 26px; padding: 4px 0 4px 20px;
+      border-left: 3px solid var(--accent);
+      font-family: var(--font-display); font-size: 21px; line-height: 1.4; color: var(--ink);
+    }
+
+    /* ---------- Tables ---------- */
+    .table-wrap {
+      margin: 8px 0 14px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+    }
+    table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 900px; font-size: 14px; line-height: 1.45; }
+    caption { text-align: left; padding: 14px 16px 4px; font-weight: 600; font-size: 14px; color: var(--ink); }
+    caption small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; }
+    th, td { text-align: left; vertical-align: top; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+    thead th {
+      font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+      color: var(--muted); background: var(--surface-2); white-space: nowrap;
+    }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+    tbody th { font-weight: 600; white-space: nowrap; }
+    .sticky-col { position: sticky; left: 0; z-index: 1; background: var(--surface); box-shadow: 1px 0 0 var(--line); }
+    thead .sticky-col { background: var(--surface-2); z-index: 2; }
+    tbody tr:hover th, tbody tr:hover td { background: var(--surface-2); }
+    .scroll-hint { display: none; font-size: 13px; color: var(--faint); margin: 0 0 6px; }
+
+    .flag {
+      display: inline-block; font-size: 11.5px; font-weight: 500; line-height: 1.5;
+      padding: 0 7px; border-radius: 999px; white-space: nowrap;
+      background: var(--learning-soft); color: var(--learning);
+    }
+    .yes { color: var(--accent); font-weight: 500; }
+    .no { color: var(--muted); }
+
+    .table-sources { font-size: 14px; color: var(--muted); }
+    .table-sources b { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Recommendations ---------- */
+    .strategy {
+      max-width: 70ch; margin: 0 0 28px; padding: 18px 20px;
+      background: var(--accent-soft); border-radius: var(--radius-sm); line-height: 1.6;
+    }
+    .strategy .eyebrow { color: var(--accent); margin-bottom: 6px; }
+    .strategy p { margin: 0; }
+    .tier { margin: 0 0 28px; }
+    .tier-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 12px; }
+    .tier-head h3 { margin: 0; }
+    .tier-pill {
+      font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 999px; background: var(--ink); color: var(--bg);
+    }
+    .tier--next .tier-pill { background: var(--surface-2); color: var(--ink); }
+    .tier--later .tier-pill { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .tier-head small { color: var(--faint); font-size: 13px; }
+    .recs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 78ch; }
+    .rec {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm);
+      padding: 16px 18px;
+    }
+    .tier--now .rec { border-left: 3px solid var(--accent); }
+    .rec-area {
+      display: inline-block; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 6px;
+    }
+    .rec-what { margin: 0 0 8px !important; font-weight: 500; line-height: 1.5 !important; }
+    .rec-why { margin: 0 !important; color: var(--muted); font-size: 14.5px; line-height: 1.55 !important; }
+    .rec-why span { font-weight: 600; color: var(--ink); }
+
+    .questions { max-width: 70ch; margin: 0 0 18px; padding: 0; list-style: none; counter-reset: q; display: grid; gap: 10px; }
+    .questions li {
+      counter-increment: q; position: relative; padding: 14px 18px 14px 54px;
+      background: var(--surface-2); border-radius: var(--radius-sm); line-height: 1.55;
+    }
+    .questions li::before {
+      content: counter(q); position: absolute; left: 16px; top: 13px;
+      width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--learning-soft); color: var(--learning); font-weight: 600; font-size: 13px;
+    }
+
+    /* ---------- Sources ---------- */
+    .sources h3 { font-size: 18px; margin-top: 28px; }
+    .sources ol { margin: 0 0 8px; padding-left: 22px; max-width: 78ch; font-size: 14.5px; line-height: 1.5; }
+    .sources li { margin: 0 0 6px; overflow-wrap: anywhere; }
+    .sources li::marker { color: var(--faint); font-variant-numeric: tabular-nums; }
+    .sources .host { color: var(--faint); font-size: 13px; }
+
+    .r-foot {
+      max-width: 1120px; margin: 0 auto; padding: 24px 24px 48px;
+      border-top: 1px solid var(--line); color: var(--faint); font-size: 14px;
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
+    }
+    .r-foot a { color: var(--muted); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 980px) {
+      .r-layout { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+      .toc {
+        position: static; background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--radius); padding: 18px 18px 14px; margin-bottom: 32px;
+      }
+      .toc > ol { columns: 2; column-gap: 24px; }
+      .toc li { break-inside: avoid; }
+      .findings ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 720px) {
+      main.r-main { padding: 4px 16px 56px; }
+      .r-foot { padding: 20px 16px 40px; }
+      .r-head { padding: 20px 0 24px; }
+      .r-sub { font-size: 17px; }
+      .findings ul { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .finding { padding: 16px 18px 18px; }
+      .finding b { font-size: 22px; }
+      .toc > ol { columns: 1; }
+      .scroll-hint { display: block; }
+      .content p.lede { font-size: 17px; }
+      .content section + section { padding-top: 32px; }
+      .pullquote { font-size: 19px; }
+      .back-link span { display: none; }
+    }
+    @media print {
+      .topbar, .toc, .scroll-hint { display: none; }
+      .r-layout { display: block; }
+      .table-wrap { overflow: visible; }
+      table { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./index.html">
+      <span class="brand-mark" aria-hidden="true"></span>
+      Kartky
+    </a>
+    <a class="back-link" href="./index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      <span>Back to</span> flashcards
+    </a>
+  </header>
+
+  <main class="r-main">
+    <header class="r-head">
+      <p class="eyebrow">Market research</p>
+      <h1>Competitor &amp; market research</h1>
+      <p class="r-sub">Kartky can own the gap incumbents abandoned: who competes with a free, no-account, Ukrainian-first vocabulary app, where demand is, and what to build next.</p>
+      <ul class="r-meta">
+        <li class="updated">Updated October 2026</li>
+        <li>English &amp; Spanish from Ukrainian</li>
+        <li>Sources linked inline</li>
+      </ul>
+    </header>
+
+    <section class="findings" aria-labelledby="findings-title">
+      <h2 id="findings-title">Key findings</h2>
+      <ul>
+        <li class="finding good">
+          <span class="tag">The gap</span>
+          <b>The slot is nearly empty</b>
+          <p>No competitor turned up that offers curated, topic-and-level vocabulary decks for Ukrainian speakers, free, with no account, no ads and no paywall. For Spanish it is uncontested.</p>
+        </li>
+        <li class="finding">
+          <span class="tag">The market</span>
+          <b>~$6–17B, Duolingo-led</b>
+          <p>Every major player sells a subscription behind a login: roughly $8–20/month for full courses, $36–80/year for vocabulary apps. Incumbents are racing toward AI conversation.</p>
+        </li>
+        <li class="finding">
+          <span class="tag">English</span>
+          <b>Compete on friction, not price</b>
+          <p>English-from-Ukrainian is already served for free by Babbel, Promova and Duolingo, so Kartky&rsquo;s English decks must win on friction and curation.</p>
+        </li>
+        <li class="finding good">
+          <span class="tag">Spanish</span>
+          <b>353,000+ Ukrainians in Spain</b>
+          <p>Spanish-from-Ukrainian is thin and serves a concentrated, motivated audience: the diaspora in Spain, plus travellers.</p>
+        </li>
+        <li class="finding warn">
+          <span class="tag">Biggest weakness</span>
+          <b>No spaced retrieval</b>
+          <p>The card format matches what vocabulary research favours; the missing piece is spaced retrieval, which the evidence identifies as the main engine of retention.</p>
+        </li>
+        <li class="finding warn">
+          <span class="tag">Timing</span>
+          <b>Promova&rsquo;s free window ends ~now</b>
+          <p>Its three-year free access for Ukrainians started in November 2023 and should lapse around now unless it is extended (not yet verified).</p>
+        </li>
+      </ul>
+    </section>
+
+    <div class="r-layout">
+      <nav class="toc" aria-labelledby="toc-title">
+        <h2 id="toc-title">Contents</h2>
+        <ol>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#market">Market size &amp; trends</a></li>
+          <li><a href="#competitors">Competitor landscape</a>
+            <ol>
+              <li><a href="#rivals">ReWord &amp; Promova</a></li>
+              <li><a href="#free-space">The free, open space</a></li>
+            </ol>
+          </li>
+          <li><a href="#ukraine">Demand in Ukraine &amp; Spain</a></li>
+          <li><a href="#positioning">Positioning</a></li>
+          <li><a href="#learning-science">Learning science</a></li>
+          <li><a href="#recommendations">Recommendations</a>
+            <ol>
+              <li><a href="#now">Now (P0)</a></li>
+              <li><a href="#next">Next (P1)</a></li>
+              <li><a href="#later">Later (P2)</a></li>
+              <li><a href="#monetization">Monetization</a></li>
+              <li><a href="#open-questions">Open questions</a></li>
+            </ol>
+          </li>
+          <li><a href="#conclusion">Conclusion</a></li>
+          <li><a href="#sources">Sources</a></li>
+        </ol>
+      </nav>
+
+      <article class="content">
+
+        <section id="overview" aria-labelledby="overview-h">
+          <h2 id="overview-h"><span class="num">01</span>Kartky can own the gap incumbents abandoned</h2>
+          <p class="lede">Kartky enters a crowded, $6–17B-a-year market dominated by Duolingo, but the specific slot it targets is nearly empty: in this research, no competitor turned up that offers curated, topic-and-level vocabulary decks for Ukrainian speakers, free, with no account, no ads and no paywall. The space is uncontested for Spanish in particular.</p>
+          <p>Every major player sells a subscription (roughly $8–20/month for full courses, $36–80/year for vocabulary apps) behind a login. The trend since 2023 has run against users: Quizlet moved study modes behind a paywall, Memrise pulled community decks out of its app, and Duolingo rationed free practice through its &ldquo;energy&rdquo; system. Meanwhile incumbents are racing toward AI conversation.</p>
+          <p>English-from-Ukrainian is already well served for free by Babbel, Promova and Duolingo, so Kartky&rsquo;s English decks have to compete on friction and curation rather than price. Spanish-from-Ukrainian is thin. It serves a concentrated, motivated audience: more than 353,000 Ukrainians living in Spain, plus travellers.</p>
+          <p>Kartky&rsquo;s card format (a target-language definition, a Ukrainian translation, several example sentences and audio) matches what vocabulary research favours. Its biggest weakness is not features in general but one specific gap: it has no spaced retrieval, which the evidence identifies as the main engine of retention. The highest-value next steps are a localStorage review queue, offline (PWA) support, search-indexable Ukrainian-language deck pages, and Telegram-first distribution.</p>
+          <p>The timing matters: Promova&rsquo;s three-year free access for Ukrainians, which started in November 2023, should lapse around now unless it is extended.</p>
+        </section>
+
+        <section id="market" aria-labelledby="market-h">
+          <h2 id="market-h"><span class="num">02</span>A $6–17B market where Duolingo dominates and the action is AI conversation</h2>
+          <p>Analysts disagree on the market&rsquo;s size by about a factor of five because they define it differently. QYResearch puts narrowly defined language-learning <em>applications</em> at <strong>$2.98B in 2024</strong> (<a href="https://www.giikorea.co.kr/report/qyr1862207-language-learning-application-global-market-share.html" target="_blank" rel="noopener">QYResearch via GIIKorea</a>). Meticulous Research estimates <strong>$5.86B for 2025</strong> (<a href="https://meticulousresearch.com/reports/language-learning-apps-market-5658" target="_blank" rel="noopener">Meticulous Research</a>), Market Research Future <strong>$13.32B for 2025</strong> at an 11.5% CAGR (<a href="https://www.marketresearchfuture.com/zh-cn/reports/language-learning-apps-market-38354" target="_blank" rel="noopener">MRFR</a>), and ResearchAndMarkets puts the broader <em>online</em> language-learning market at <strong>$16.62B in 2025</strong>, growing about 19.5% a year (<a href="https://www.webull.com/news/14049548037866496" target="_blank" rel="noopener">Webull/ResearchAndMarkets</a>).</p>
+          <p>The lowest figures are hard to square with reality. Duolingo alone guides to <strong>$1,207M of 2026 revenue (+16.3%)</strong>, which implies about $1.04B in 2025 (<a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Duolingo Q2 2026 letter</a>), and Babbel booked about <strong>&euro;352M in 2024</strong> (<a href="https://skillademia.com/statistics/babbel-statistics/" target="_blank" rel="noopener">Skillademia</a>). The defensible framing is roughly $6–17B in 2025, growing 7–20% a year.</p>
+
+          <div class="table-wrap" role="region" aria-labelledby="market-cap" tabindex="0">
+            <table style="min-width: 560px">
+              <caption id="market-cap">Market-size estimates compared<small>Different definitions explain most of the spread</small></caption>
+              <thead>
+                <tr><th scope="col">Source</th><th scope="col">Scope</th><th scope="col">Estimate</th><th scope="col">Growth</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>QYResearch</td><td>Language-learning <em>applications</em> (narrow)</td><td>$2.98B (2024)</td><td>&mdash;</td></tr>
+                <tr><td>Meticulous Research</td><td>Language-learning apps</td><td>$5.86B (2025)</td><td>&mdash;</td></tr>
+                <tr><td>Market Research Future</td><td>Language-learning apps</td><td>$13.32B (2025)</td><td>11.5% CAGR</td></tr>
+                <tr><td>ResearchAndMarkets</td><td><em>Online</em> language learning (broad)</td><td>$16.62B (2025)</td><td>~19.5% a year</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-sources">Same figures and sources as the paragraph above; the report&rsquo;s defensible framing is roughly $6–17B in 2025, growing 7–20% a year.</p>
+
+          <p>The market is highly concentrated. In Q2 2026 Duolingo reported <strong>140.6M monthly active users, 58.7M daily active users and 12.7M paid subscribers</strong> (<a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Duolingo Q2 2026 letter</a>). Kartky&rsquo;s two languages are the most contested in the world: English was the most-studied language in <strong>154 countries</strong> in Duolingo&rsquo;s 2025 report, and Spanish was #2 globally and #1 in 26 countries (<a href="https://blog.duolingo.com/2025-duolingo-language-report/" target="_blank" rel="noopener">Duolingo 2025 Language Report</a>). Demand is not the issue. Getting noticed is.</p>
+
+          <h3 id="trends">Three trends that shape where a small entrant fits</h3>
+          <p><strong>First, AI conversation is the main pitch for paid tiers.</strong> Duolingo is rolling its &ldquo;Video Call&rdquo; AI partner out to Super subscribers. OpenAI-backed Speak raised $78M at a <strong>$1B valuation</strong> (<a href="https://techcrunch.com/2024/12/10/openai-backed-speak-raises-78m-at-1b-valuation-to-help-users-learn-languages-by-talking-out-loud" target="_blank" rel="noopener">TechCrunch</a>), and Praktika raised $35.5M for AI avatar tutors (<a href="https://techcrunch.com/2024/05/22/praktika-raises-35-5m-to-use-ai-avatars-to-make-learning-languages-feel-more-natural" target="_blank" rel="noopener">TechCrunch</a>).</p>
+          <p><strong>Second, AI has made content cheap but has cost trust.</strong> Duolingo launched <strong>148 AI-built courses in about a year</strong>, against roughly 12 years for its first 100 (<a href="https://fox6now.com/news/duolingo-148-courses-ai" target="_blank" rel="noopener">FOX6</a>), and its April 2025 &ldquo;AI-first&rdquo; memo set off a public backlash (<a href="https://www.techrepublic.com/article/news-duolingo-ai-strategy-backlash/" target="_blank" rel="noopener">TechRepublic</a>).</p>
+          <p><strong>Third, engagement mechanics are showing their limits.</strong> Duolingo&rsquo;s stock fell sharply in November 2025 when the CEO said the company would shift &ldquo;a little bit&rdquo; toward teaching quality (<a href="https://www.sherwood.news/markets/duolingo-q3-2025-earnings-user-growth-miss-guidance" target="_blank" rel="noopener">Sherwood News</a>), and a June 2026 &ldquo;Streak Revival&rdquo; stunt pulled back 15.4M learners, nearly 8M of whom had no active streak (<a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Duolingo Q2 2026 letter</a>).</p>
+
+          <p>One data point matters most for Kartky. In Sensor Tower&rsquo;s 2024 analysis, <strong>more than 40% of Babbel, Busuu, Pimsleur and Rosetta Stone users also used Duolingo</strong> (<a href="https://sensortower.com/blog/empowering-education-global-trends-and-opportunities-in-ed-tech" target="_blank" rel="noopener">Sensor Tower</a>).</p>
+          <blockquote class="pullquote">Learners stack tools. Kartky does not need to replace anyone&rsquo;s main course; it needs to be the obvious free supplement to one.</blockquote>
+        </section>
+
+        <section id="competitors" aria-labelledby="competitors-h">
+          <h2 id="competitors-h"><span class="num">03</span>Every competitor charges, requires a login, or skips Ukrainian</h2>
+          <p>Kartky faces three rings of competition. The <strong>outer ring</strong> is the full-course apps, which teach vocabulary implicitly inside lessons. The <strong>middle ring</strong> is user-generated flashcard platforms, which have the right format but no curated Ukrainian content. The <strong>inner ring</strong> is curated vocabulary apps, which come closest in concept but are all freemium, app-installed and account-based. The table summarises the most relevant players.</p>
+          <div class="note"><b>Caveat:</b> Prices are 2026 figures, mostly from third-party trackers, and should be checked against vendor pages before anyone quotes them.</div>
+
+          <p class="scroll-hint" aria-hidden="true">Swipe the table sideways to see all columns &rarr;</p>
+          <div class="table-wrap" role="region" aria-labelledby="comp-cap" tabindex="0">
+            <table>
+              <caption id="comp-cap">Competitor comparison<small>Prices are 2026 figures; unverified items are flagged</small></caption>
+              <thead>
+                <tr>
+                  <th scope="col" class="sticky-col">Product</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Price (2026)</th>
+                  <th scope="col">Scale</th>
+                  <th scope="col">Account / ads / limits</th>
+                  <th scope="col">Ukrainian base?</th>
+                  <th scope="col">Spanish from Ukrainian?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="sticky-col">Duolingo</th>
+                  <td>Gamified course</td>
+                  <td>Freemium (Super/Max)</td>
+                  <td>140.6M MAU, 12.7M paid</td>
+                  <td>Account; energy limits on free tier</td>
+                  <td><span class="yes">Yes</span>, for English</td>
+                  <td><span class="flag">Unconfirmed</span> possible after the May 2025 expansion</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Babbel</th>
+                  <td>Paid course</td>
+                  <td>~$17.95/mo; ~$107/yr</td>
+                  <td>&euro;352M revenue (2024)</td>
+                  <td>Account; free only for Ukrainians</td>
+                  <td><span class="yes">Yes</span>, free (EN/DE/PL)</td>
+                  <td><span class="no">No</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Promova</th>
+                  <td>Course app (Ukrainian-founded)</td>
+                  <td>$119.99/yr</td>
+                  <td>20M+ users</td>
+                  <td>Account; free for Ukrainians from Nov 2023 for 3 yrs</td>
+                  <td><span class="yes">Yes</span></td>
+                  <td><span class="yes">Yes</span> (ES and LATAM ES)</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Mondly</th>
+                  <td>Course app</td>
+                  <td>Lifetime $299.99 list, ~$89.99 resold</td>
+                  <td>Not disclosed</td>
+                  <td>Account; freemium</td>
+                  <td><span class="flag">Likely</span></td>
+                  <td><span class="flag">Likely</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Anki</th>
+                  <td>User-generated SRS</td>
+                  <td>Free; iOS $24.99 one-time</td>
+                  <td>AnkiDroid 10M+ installs</td>
+                  <td>Account only for sync; no ads</td>
+                  <td>User decks only</td>
+                  <td>User decks only</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Quizlet</th>
+                  <td>User-generated sets</td>
+                  <td>Plus $35.99/yr; Unlimited $44.99/yr</td>
+                  <td>60M MAU (2021)</td>
+                  <td>Account; ads; Learn/Test capped</td>
+                  <td>User sets only</td>
+                  <td>User sets only</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Memrise</th>
+                  <td>Curated courses + AI</td>
+                  <td>Pro ~$60/yr <span class="flag">unverified</span></td>
+                  <td>87M+ registered</td>
+                  <td>Account; freemium</td>
+                  <td><span class="no">No</span> (Ukrainian only as target)</td>
+                  <td><span class="no">No</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Lingvist</th>
+                  <td>Sentence-cards + SRS</td>
+                  <td>~$79.99/yr</td>
+                  <td>7M downloads</td>
+                  <td>Account; subscription</td>
+                  <td>Ukrainian UI; pairs <span class="flag">unconfirmed</span></td>
+                  <td><span class="flag">Unconfirmed</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Drops</th>
+                  <td>Visual vocab game</td>
+                  <td>From ~$13/mo <span class="flag">low confidence</span></td>
+                  <td>50M+ learners <span class="flag">claimed</span></td>
+                  <td>Account; ads and time limit on free</td>
+                  <td>Ukrainian as target only</td>
+                  <td><span class="no">No</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">ReWord</th>
+                  <td>Topic word decks + SRS</td>
+                  <td>Subscription</td>
+                  <td>1M+ users <span class="flag">claimed</span></td>
+                  <td>Daily word limit on free</td>
+                  <td><span class="yes">Yes</span> (Ukrainian UI)</td>
+                  <td><span class="yes">Yes</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Clozemaster</th>
+                  <td>Cloze sentences + SRS</td>
+                  <td>$79.99/yr</td>
+                  <td>Not disclosed</td>
+                  <td>Account; freemium</td>
+                  <td><span class="no">No</span> (ukr-eng only)</td>
+                  <td><span class="no">No</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-sources"><b>Sources for the table:</b> Duolingo (<a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Q2 2026 letter</a>); Babbel (<a href="https://toolradar.com/guides/best-language-learning-apps" target="_blank" rel="noopener">Toolradar</a>, <a href="https://support.babbel.com/hc/en-gb/articles/4985331352980-Courses-for-Ukrainian-refugees" target="_blank" rel="noopener">Babbel support</a>); Promova (<a href="https://apps.apple.com/bb/app/id1460782849" target="_blank" rel="noopener">App Store</a>, <a href="https://en.wikipedia.org/wiki/Promova" target="_blank" rel="noopener">Wikipedia</a>); Mondly (<a href="https://store.entrepreneur.com/sales/mondly-premium-lifetime-subscription-all-languages" target="_blank" rel="noopener">reseller page</a>); Anki (<a href="https://www.mindomax.com/is-anki-free" target="_blank" rel="noopener">mindomax</a>); Quizlet (<a href="https://recurdash.com/subscription-pricing/quizlet-plus" target="_blank" rel="noopener">recurdash</a>, <a href="https://en.wikipedia.org/wiki/Quizlet" target="_blank" rel="noopener">Wikipedia</a>); Memrise (<a href="https://en.wikipedia.org/wiki/Memrise" target="_blank" rel="noopener">Wikipedia</a>, <a href="https://subger.com/en/service/memrise" target="_blank" rel="noopener">subger</a>); Lingvist (<a href="https://lingvist.com/" target="_blank" rel="noopener">lingvist.com</a>, <a href="https://subger.com/en/service/lingvist" target="_blank" rel="noopener">subger</a>); Drops (<a href="https://languagedrops.com/" target="_blank" rel="noopener">languagedrops.com</a>); ReWord (<a href="https://reword.app/" target="_blank" rel="noopener">reword.app</a>, <a href="https://apps.apple.com/ru/app/%D0%B8%D1%81%D0%BF%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9-%D1%8F%D0%B7%D1%8B%D0%BA-%D1%83%D1%87%D0%B8%D1%82%D1%8C-%D1%81%D0%BB%D0%BE%D0%B2%D0%B0/id1397753065?l=uk" target="_blank" rel="noopener">App Store</a>); Clozemaster (<a href="https://apps.apple.com/us/app/-/id1149199075" target="_blank" rel="noopener">App Store</a>, <a href="https://www.clozemaster.com/languages" target="_blank" rel="noopener">languages</a>).</p>
+
+          <h3 id="rivals">ReWord is the closest direct rival; Promova is the most important indirect one</h3>
+          <p><strong>ReWord</strong> is the product most like Kartky. It sells topic-categorised word decks with SRS, a Ukrainian interface, and separate English and Spanish apps whose App Store listings are localised as &ldquo;<span lang="uk">Вчити слова</span>&rdquo; (<a href="https://reword.app/" target="_blank" rel="noopener">reword.app</a>). Its English app covers about <strong>12,000 words, including Oxford 3000/5000</strong>, and works offline (<a href="https://www.apkmirror.com/apk/poas/reword-learn-english-language" target="_blank" rel="noopener">APKMirror</a>). The free tier limits how many words a user can learn per day. Against ReWord, Kartky has fewer words, no SRS and no offline mode. It is ahead on depth per card (a target-language explanation plus three example sentences), on being free with no limits and no account, and on running in a browser with nothing to install.</p>
+          <p><strong>Promova</strong> is the Ukrainian-founded heavyweight, with <strong>20M+ users</strong> and Fast Company and TIME/Statista recognition in 2025 (<a href="https://mezha.ua/en/news/promova-u-topi-zrostayuchih-kompaniy-time-301596/" target="_blank" rel="noopener">Mezha</a>). It teaches English and both Spanish variants with Ukrainian explanations. Since November 2023 it has given Ukrainian citizens <strong>three years of free Premium</strong> through the government&rsquo;s Future Perfect programme, verified via Diia (<a href="https://www.kmu.gov.ua/news/vyvchaty-anhliisku-bezoplatno-platforma-promova-stala-chastynoiu-natsionalnoi-prohramy-future-perfect" target="_blank" rel="noopener">KMU</a>). By that start date, the access ends around November 2026. No extension had been announced in the sources reviewed, so this needs checking, but if the window closes, many Ukrainian learners will be looking for a free alternative just as Kartky is ready.</p>
+          <div class="note"><b>Needs checking:</b> the end date of Promova&rsquo;s free access (around November 2026) is inferred from its November 2023 start; no extension had been announced in the sources reviewed.</div>
+          <p><strong>Babbel</strong> has had free Ukrainian-base courses since 2022 and has about <strong>750,000 registrations</strong>. It covers only English, German and Polish, not Spanish (<a href="https://euromaidanpress.com/2024/09/20/babbel-extends-free-courses-in-three-languages-for-ukrainians" target="_blank" rel="noopener">Euromaidan Press</a>). <strong>Duolingo</strong> offers English for Ukrainian speakers (<a href="https://blog.duolingo.com/duolingo-statement-ukraine" target="_blank" rel="noopener">Duolingo blog</a>). Its May 2025 AI expansion made Spanish available from all 28 interface languages (<a href="https://mezha.ua/news/duolingo-gen-ai-148-kursiv-301580/amp/" target="_blank" rel="noopener">Mezha</a>), but this research could not confirm that Ukrainian is one of them. If it is, a beginner-level, AI-generated uk&rarr;es course exists, and that would narrow Kartky&rsquo;s Spanish advantage at the A1–A2 end.</p>
+
+          <h3 id="free-space">The free, open space is fragmented and has no Ukrainian focus</h3>
+          <p>The genuinely free options are scattered. Anki is free and powerful but ships with no official curated content. Quenti bills itself as an open-source Quizlet alternative with &ldquo;no ads, paywalls, or similar barriers&rdquo; (<a href="https://hunted.space/product/quenti" target="_blank" rel="noopener">hunted.space</a>). Deckademy grew out of the Memrise community-course fallout (<a href="https://refold.la/blog/a-fun-new-flashcard-app-for-language-learning" target="_blank" rel="noopener">Refold</a>). Wordwall, which teachers use widely, caps its free plan at <strong>3 custom activities</strong> (<a href="https://wordwall.net/en/price-plans" target="_blank" rel="noopener">Wordwall</a>). Recent Product Hunt vocabulary launches are mostly freemium AI deck builders, and penguen.io, a free no-ads SRS app, launched to essentially no traction (<a href="https://hunted.space/product/penguen-io" target="_blank" rel="noopener">hunted.space</a>).</p>
+          <p>There is demand for printed themed bilingual vocabulary: DK sells a 6,500-word English–Ukrainian visual dictionary organised by theme (<a href="https://dk.com/en-us/products/9780744080032-ukrainian-english-bilingual-visual-dictionary" target="_blank" rel="noopener">DK</a>). In Ukraine, free vocabulary content mostly lives in Telegram and YouTube channels run by schools, not in dedicated flashcard sites (<a href="https://www.education.ua/blog/49623/" target="_blank" rel="noopener">education.ua</a>).</p>
+          <div class="note"><b>How firm is the gap?</b> The claim that no curated, Ukrainian-first, no-signup English+Spanish site exists rests on searches that found none, not on a full census, but it held up across all four research streams.</div>
+        </section>
+
+        <section id="ukraine" aria-labelledby="ukraine-h">
+          <h2 id="ukraine-h"><span class="num">04</span>Ukraine has a big English gap, a small but concentrated Spanish niche, and policy tailwinds</h2>
+
+          <h3 id="english-gap">English: large and mostly unmet</h3>
+          <p>The English opportunity in Ukraine is large and mostly unmet. In a 2023 KIIS survey for the Ministry of Digital Transformation, <strong>51% of Ukrainians said they speak English, yet only 23% could read, write and communicate at an everyday or professional level</strong> (<a href="https://www.kmu.gov.ua/news/99-ukraintsiv-uvazhaiut-shcho-potribno-vyvchaty-inozemni-movy-doslidzhennia-mintsyfry-usaid-ta-kmis" target="_blank" rel="noopener">KMU</a>; <a href="https://vikna.tv/dozvillia/yakyj-vidsotok-ukrayincziv-volodiye-inozemnymy-movamy-opytuvannya-kmis/amp/" target="_blank" rel="noopener">Vikna</a>). The barriers people named fit a free, low-effort tool closely: <strong>lack of time (38%), other priorities (34%), lack of funds (33%) and lack of motivation (31%)</strong>. The top motivation was travel (43%), which is one of Kartky&rsquo;s existing topics.</p>
+          <p>Proficiency is slipping. Ukraine fell from #40 (535 points) in the 2024 EF English Proficiency Index to <strong>#45 (526) in 2025</strong>, with a wide regional spread from Lviv (572) to Kherson (472) (<a href="https://www.ef.com/wwen/epi/regions/europe/ukraine/" target="_blank" rel="noopener">EF EPI</a>). The pipeline of school-age learners is also large: <strong>115,781 people registered for the English section of the 2025 national university entrance test (NMT)</strong> (<a href="https://osvita.ua/test/rez_zno/95651/" target="_blank" rel="noopener">osvita.ua</a>).</p>
+
+          <h3 id="spanish-niche">Spanish: smaller, but reachable</h3>
+          <p>Spanish is a smaller market but a reachable one. Among Ukrainian learners on Preply in 2025, <strong>English was 64% of target languages and Spanish 6%</strong>, ahead of German (5%) and French (4%) (<a href="https://interfax.com.ua/news/general/1136511.html" target="_blank" rel="noopener">Interfax-Ukraine</a>). The concentrated segment is the diaspora: Spain had <strong>more than 353,000 Ukrainian nationals with residence permits as of June 2026, up 8.2% year on year</strong> (<a href="https://www.inclusion.gob.es/en/w/el-numero-de-personas-de-nacionalidad-ucraniana-con-autorizacion-de-residencia-en-espana-supera-las-353.000-en-junio-de-2026" target="_blank" rel="noopener">Spanish Ministry of Inclusion</a>), and Spanish temporary-protection cards are extended through March 2027 (<a href="https://www.envoyglobal.com/news-alert/spain-extends-temporary-protection-cards-for-ukrainian-nationals-through-march-2027/" target="_blank" rel="noopener">Envoy Global</a>).</p>
+          <p>These people need everyday vocabulary for food, family and getting around, which matches Kartky&rsquo;s topics. Few tools teach them from Ukrainian. Babbel&rsquo;s free offer skips Spanish, and the alternatives are Promova, ReWord, probably Mondly, and possibly Duolingo.</p>
+          <div class="note"><b>Not measured:</b> how Ukrainians in Spain actually learn Spanish today was not measured; it is plausible that many use Russian- or English-base courses.</div>
+
+          <h3 id="policy">Policy adds long-term demand</h3>
+          <p>Law No. 3760-IX, signed in June 2024, recognises English as a language of international communication and requires it for senior civil servants, designated military officers, police leadership, and tax and customs staff (<a href="https://news.dtkt.ua/society/community/91059-angliiska-iak-mova-miznarodnogo-spilkuvannia-v-ukrayini-dije-zakon" target="_blank" rel="noopener">DTKT</a>). Cabinet resolutions of April 2026 set <strong>A2 to B2 levels by post</strong>, applying two or four years after martial law ends (<a href="https://kadroland.com/news/9435-xto-zobovyazanii-znati-angliisku-kabmin-zatverdiv-novi-pravila-dlya-posad" target="_blank" rel="noopener">Kadroland</a>). A separate resolution sets a pay bonus for civil servants with English at B2 or above, reported as 10% (<a href="https://jurliga.ligazakon.net/news/235231_zatverdzheno-poryadok-vstanovlennya-ta-viplati-derzhsluzhbovtsyam-nadbavki-za-volodnnya-anglyskoyu-movoyu" target="_blank" rel="noopener">Ligazakon</a>; <a href="https://osvita.ua/vnz/reports/management/94621/" target="_blank" rel="noopener">osvita.ua</a>). For these learners a flashcard app is a supplement to formal courses, not a replacement.</p>
+          <p>The government&rsquo;s Future Perfect programme gathers free tools from partners and accepts new ones by email at <a href="mailto:osvita@thedigital.gov.ua">osvita@thedigital.gov.ua</a> (<a href="https://itc.ua/ua/novini/future-perfect-v-ukrayini-zapuskayut-natsionalnu-programu-z-populyaryzatsiyi-anglijskoyi-iz-bezplatnymy-kursamy-dlya-gromadyan/amp/" target="_blank" rel="noopener">ITC.ua</a>). That is a direct path to official endorsement for a free tool.</p>
+
+          <h3 id="pay-and-reach">Willingness to pay and distribution</h3>
+          <p>Two features of the market decide how Kartky should grow and how it can make money. Willingness to pay is low: <strong>only 22% of Ukrainians will pay for media content at all, mostly 60&nbsp;UAH (about $1.50) a month or less</strong> (<a href="https://kyivindependent.com/telegram-dominates-and-tiktok-grows-in-news-consumption-in-ukraine-fueling-privacy-and-propaganda-concerns/" target="_blank" rel="noopener">Kyiv Independent/Internews</a>). Paid alternatives are expensive by comparison: tutors cost <strong>400–600&nbsp;UAH an hour</strong> (<a href="https://finance.ua/ua/goodtoknow/skilki-kosztue-vyvczyty-anglijsku" target="_blank" rel="noopener">Finance.ua</a>) and Englishdom about 380–420&nbsp;UAH a lesson (<a href="https://dou.ua/calendar/54966/" target="_blank" rel="noopener">DOU</a>).</p>
+          <p>Distribution runs through Telegram, which <strong>92% of urban Ukrainians aged 18–60 use weekly</strong> (<a href="https://gradus.app/en/open-reports/research-media-consumption-ukraine" target="_blank" rel="noopener">Gradus</a>). It is also the leading news source, at 51% (<a href="https://www.pravda.com.ua/eng/news/2025/09/25/7532494" target="_blank" rel="noopener">Ukrainska Pravda</a>), and online English schools use Telegram channels to acquire students (<a href="https://www.education.ua/blog/49623/" target="_blank" rel="noopener">education.ua</a>).</p>
+          <p>There is also a reputational factor: Lingualeo, long listed among options for Ukrainians, is of Russian origin (<a href="https://en.wikipedia.org/wiki/LinguaLeo" target="_blank" rel="noopener">Wikipedia</a>; <a href="https://finance.ua/ua/goodtoknow/skilki-kosztue-vyvczyty-anglijsku" target="_blank" rel="noopener">Finance.ua</a>). That works in favour of a visibly Ukrainian-first product.</p>
+          <div class="note"><b>Inference:</b> this is an inference; no survey of Ukrainian users&rsquo; avoidance of Russian products was found.</div>
+        </section>
+
+        <section id="positioning" aria-labelledby="positioning-h">
+          <h2 id="positioning-h"><span class="num">05</span>Incumbents&rsquo; broken promises are Kartky&rsquo;s best positioning</h2>
+
+          <h3 id="complaints">Four recurring user complaints</h3>
+          <p><strong>1. Free value being taken away.</strong> This is the most consistent theme in user complaints. In 2025 Duolingo replaced hearts with <strong>&ldquo;energy&rdquo;: free users get 25 units, and every exercise drains one, including correct answers</strong>. When energy runs out, users must watch ads, pay gems, wait or subscribe (<a href="https://androidauthority.com/quitting-duolingo-energy-system-3599842" target="_blank" rel="noopener">Android Authority</a>; <a href="https://uxdesign.cc/duolingos-small-ui-switch-that-changes-everything-fae257203633" target="_blank" rel="noopener">UX Collective</a>). Quizlet moved Learn and Test behind its paywall in 2022 (<a href="https://baronnews.com/2022/10/20/quizlets-upgrade-isnt-an-upgrade-at-all/" target="_blank" rel="noopener">Baron News</a>), now caps Learn at 20 rounds a month even on paid Plus (<a href="https://recurdash.com/subscription-pricing/quizlet-plus" target="_blank" rel="noopener">recurdash</a>), and has a reported Trustpilot score of about <strong>1.4/5</strong> (<a href="https://www.remnote.com/blog/best-quizlet-alternatives" target="_blank" rel="noopener">RemNote</a>). Memrise announced in November 2023 that it would &ldquo;sunset&rdquo; user-created courses and moved them out of its apps in 2024, provoking &ldquo;concerns, frustration, and even anger&rdquo; (<a href="https://en.wikipedia.org/wiki/Memrise" target="_blank" rel="noopener">Wikipedia</a>).</p>
+          <p><strong>2. Gamification that crowds out learning.</strong> Writers describe Duolingo&rsquo;s streak as having &ldquo;evolved into a distinct anxiety&rdquo;, with timed XP boosts pushing users to rush lessons (<a href="https://androidauthority.com/duolingo-xp-boost-ux-trap-3674572" target="_blank" rel="noopener">Android Authority</a>). The Decision Lab points to pages of &ldquo;Duolingo burnout&rdquo; threads on Reddit (<a href="https://thedecisionlab.com/es-ES/insights/consumer-insights/streak-creep-the-perils-of-too-much-gamification" target="_blank" rel="noopener">The Decision Lab</a>).</p>
+          <p><strong>3. Trust.</strong> After the AI-first memo, users publicly ended their streaks and Duolingo&rsquo;s TikTok reportedly lost more than 400k followers (<a href="https://amp.knowyourmeme.com/editorials/guides/whats-the-duolingo-ai-first-controversy-the-ceos-pro-ai-message-and-the-online-backlash-explained" target="_blank" rel="noopener">Know Your Meme</a>).</p>
+          <p><strong>4. Privacy.</strong> A 2023 Surfshark analysis found Duolingo&rsquo;s App Store labels declared <strong>19 data types, 13 of them used for tracking</strong>, and 9 of the 10 language apps it examined tracked users (<a href="https://surfshark.com/research/chart/data-hungry-language-apps" target="_blank" rel="noopener">Surfshark</a>). Anki users have the opposite problem: their complaints are about the <strong>steep learning curve, setup burden and growing review backlogs</strong>, not the algorithm (<a href="https://www.g2.com/products/anki/reviews_and_filters" target="_blank" rel="noopener">G2</a>).</p>
+
+          <h3 id="by-design">What Kartky avoids by design, and where it falls short</h3>
+          <p>Each of these complaints is something Kartky avoids by design. It has nothing to paywall, no account to collect data through, no streak to lose, nothing to configure, and decks that cannot be withdrawn from users because they are published openly on GitHub. These are verifiable claims that competitors cannot make, and they should be stated plainly in the app rather than left implicit.</p>
+          <p>The flip side is that Kartky has real gaps relative to the curated competitors:</p>
+          <ul class="prose-list">
+            <li>It has <strong>no spaced repetition</strong>, which nearly every curated app offers.</li>
+            <li>It has <strong>no offline mode</strong>, while ReWord, Anki, and the paid tiers of Drops and Clozemaster all work offline.</li>
+            <li><strong>Progress kept only in localStorage</strong> disappears when browser data is cleared and does not sync between devices.</li>
+            <li><strong>Browser TTS</strong> quality varies by operating system, whereas Memrise uses native-speaker video.</li>
+            <li>Its content is small: three topics against ReWord&rsquo;s roughly 12,000 English words.</li>
+          </ul>
+          <p>The privacy advantage is also only as strong as its weakest link. Adding conventional analytics would cancel it, so if usage data is ever needed it should come from a cookieless tool.</p>
+        </section>
+
+        <section id="learning-science" aria-labelledby="learning-h">
+          <h2 id="learning-h"><span class="num">06</span>The card format is right; the study loop is missing</h2>
+
+          <h3 id="card-format">The card format is well supported</h3>
+          <p>Kartky&rsquo;s card design is well supported by the research. A 2020 meta-analysis by Webb, Yanagisawa and Uchihara found <strong>flashcards the most effective of the intentional vocabulary activities compared</strong> (others included word lists, writing and gap-fills) for building form–meaning links (<a href="https://www.mdpi.com/2076-328X/15/11/1540/xml" target="_blank" rel="noopener">described in MDPI 2025</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9485613" target="_blank" rel="noopener">Frontiers in Psychology</a>).</p>
+          <p>On whether to explain a word in the learner&rsquo;s language or the target language, the evidence favours using both. One study found <strong>bilingualised entries (a target-language definition plus an L1 equivalent) beat both purely monolingual and purely bilingual ones</strong> (<a href="https://www.ils.unimas.my/images/pdf/v4n1/ILS_V4N1_Tahriri.pdf" target="_blank" rel="noopener">Tahriri, ILS UNIMAS</a>). Korean EFL research found translations help initial learning, while target-language definitions help retention (<a href="https://www.earticle.net/Article/A240889" target="_blank" rel="noopener">Yoon &amp; Ahn</a>). Learning while both reading and hearing a word improved recall of its spoken form compared with listening alone (<a href="https://ir.lib.uwo.ca/etd/7402" target="_blank" rel="noopener">Uchihara, Western University</a>). A 2025 SSLA study found that showing a definition <em>after</em> the reader has met the word in context worked better than showing it before (<a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/contextual-learning-and-retention-of-phrasal-verbs/128F4CAA5D71E7146B0F579E919AF794" target="_blank" rel="noopener">Cambridge Core</a>).</p>
+          <p>Kartky&rsquo;s monolingual explanation, Ukrainian translation, example sentences and TTS together form close to the evidence-favoured combination.</p>
+          <div class="note"><b>Assumption:</b> no study was found that tests three example sentences against one, so the value of the third sentence is an assumption, not an established finding.</div>
+
+          <h3 id="spacing">The missing piece: how study is scheduled</h3>
+          <p>A meta-analysis of 37 experiments by Kim and Webb (2022) confirms that <strong>spaced practice outperforms massed practice</strong> for second-language learning (<a href="https://pressto.amu.edu.pl/index.php/ssllt/article/view/49487" target="_blank" rel="noopener">SSLLT</a>). Nakata and Suzuki found spacing <strong>1.6 times as effective as massing one week after learning</strong> (<a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/effects-of-massing-and-spacing-on-the-learning-of-semantically-related-and-unrelated-words/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Cambridge Core, SSLA 2019</a>). Kartky&rsquo;s current loop (flip, shuffle, mark as known or learning) lets a learner go through a whole deck in one sitting and never be prompted to come back. That is massed practice.</p>
+          <p>The same Nakata and Suzuki study raises a second risk specific to Kartky&rsquo;s decks. <strong>Semantically related words, such as mother, father, aunt and uncle, produced more interference errors</strong>, although final test scores did not differ, and spacing reduced those confusions. Grouping by theme (words that appear together in a situation) has more support than grouping by category, though results are mixed (<a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/effects-of-massing-and-spacing-on-the-learning-of-semantically-related-and-unrelated-words/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Nakata &amp; Suzuki</a>; <a href="https://scholars.nthu.edu.tw/esploro/outputs/graduate/台灣國小外國語言社團學生語意群集與主題群集學習成效之研究/9957797821906774" target="_blank" rel="noopener">NTHU review</a>). The family deck is a textbook example of a semantic set. Shuffling across decks and spreading reviews over days addresses this without abandoning topic organisation, which learners clearly like.</p>
+
+          <h3 id="word-selection">Word selection is the third lever</h3>
+          <p>For 98% coverage, Nation estimates learners need <strong>8,000–9,000 word families for written text and 6,000–7,000 for spoken</strong> (<a href="https://www.wgtn.ac.nz/__data/assets/pdf_file/0018/1626120/2006-How-large-a-vocab.pdf" target="_blank" rel="noopener">Nation 2006</a>). The Oxford 3000/5000 lists give a CEFR-aligned core for A1–C1 English (<a href="https://www.oxfordlearnersdictionaries.com/about/wordlists/oxford3000-5000" target="_blank" rel="noopener">Oxford Learner&rsquo;s Dictionaries</a>), and Davies&rsquo; frequency dictionary does the same for the top 5,000 Spanish words (<a href="https://linguistlist.org/issues/17/1962/" target="_blank" rel="noopener">LINGUIST List</a>). Tying Kartky&rsquo;s three levels to these lists would make &ldquo;beginner&rdquo; and &ldquo;advanced&rdquo; mean something specific. It would also produce search-friendly labels like &ldquo;A1 travel vocabulary&rdquo;.</p>
+          <div class="note"><b>Evidence gap:</b> no research was found on Ukrainian native speakers learning English or Spanish vocabulary specifically, including on false friends between the languages.</div>
+        </section>
+
+        <section id="recommendations" aria-labelledby="recs-h">
+          <h2 id="recs-h"><span class="num">07</span>Prioritized recommendations</h2>
+          <div class="strategy">
+            <p class="eyebrow">The strategic choice</p>
+            <p><strong>Compete on zero friction, Ukrainian-first curation and trust, not on AI or feature count.</strong></p>
+          </div>
+          <p>Building SRS-plus-AI against Anki and dozens of funded apps is a losing contest. Being the best free Ukrainian-language vocabulary resource, especially for Spanish, is winnable. The priorities below are ordered by impact relative to effort, within Kartky&rsquo;s static, no-account constraints.</p>
+
+          <div class="tier tier--now">
+            <div class="tier-head">
+              <h3 id="now">Now</h3><span class="tier-pill">P0</span><small>5 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Product</span>
+                <p class="rec-what">Add a &ldquo;guess first, then reveal&rdquo; retrieval mode and a localStorage review queue (Leitner boxes, or &ldquo;learning cards due today&rdquo;)</p>
+                <p class="rec-why"><span>Why:</span> Spacing and retrieval are the best-evidenced gaps; it can be built without an account or server</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Product</span>
+                <p class="rec-what">Make the site an installable PWA that works offline (service worker plus manifest)</p>
+                <p class="rec-why"><span>Why:</span> Offline is a standard feature among competitors (ReWord, Anki, paid tiers); cheap to add on GitHub Pages</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Product</span>
+                <p class="rec-what">Let users export and import progress as a file</p>
+                <p class="rec-why"><span>Why:</span> Protects the no-account promise while removing the &ldquo;lost on browser clear&rdquo; pain</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Positioning</span>
+                <p class="rec-what">Publish a plain &ldquo;free forever, no account, zero data collected, open on GitHub&rdquo; statement, and say honestly how the content was made</p>
+                <p class="rec-why"><span>Why:</span> Directly answers the paywall, Memrise and privacy complaints; the AI backlash makes curation transparency a selling point</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Distribution</span>
+                <p class="rec-what">Launch Spanish-from-Ukrainian as the headline offer, aimed at Ukrainians in Spain and their communities</p>
+                <p class="rec-why"><span>Why:</span> The thinnest-served pair; 353k+ concentrated, motivated users</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tier tier--next">
+            <div class="tier-head">
+              <h3 id="next">Next</h3><span class="tier-pill">P1</span><small>5 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Distribution</span>
+                <p class="rec-what">Telegram first: a word-of-the-day channel or bot linking to decks, share buttons, and Open Graph previews per deck</p>
+                <p class="rec-why"><span>Why:</span> 92% weekly Telegram use; schools already use it to acquire students</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Distribution</span>
+                <p class="rec-what">Generate a crawlable static page per deck and level with Ukrainian titles (for example &ldquo;<span lang="uk">Англійські слова на тему подорожі A1</span>&rdquo;) from the existing list view</p>
+                <p class="rec-why"><span>Why:</span> Low-cost search-traffic asset; no competitor targets these queries with free content</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Distribution</span>
+                <p class="rec-what">Apply to Future Perfect (<a href="mailto:osvita@thedigital.gov.ua">osvita@thedigital.gov.ua</a>) and pitch education.ua/osvita.ua roundups, timed to the likely end of Promova&rsquo;s free access <span class="flag">verify the date</span></p>
+                <p class="rec-why"><span>Why:</span> Official endorsement channel; possible wave of learners losing free access</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Content</span>
+                <p class="rec-what">Tag every card with a CEFR level (Oxford 3000/5000; Davies rank) and add topics in frequency order</p>
+                <p class="rec-why"><span>Why:</span> Gives levels a concrete meaning; strengthens search pages</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Content</span>
+                <p class="rec-what">Default to shuffling across decks and levels, and add interleaved &ldquo;mixed review&rdquo; sessions</p>
+                <p class="rec-why"><span>Why:</span> Reduces confusion between similar words in the family and cuisine decks</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tier tier--later">
+            <div class="tier-head">
+              <h3 id="later">Later</h3><span class="tier-pill">P2</span><small>4 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Product</span>
+                <p class="rec-what">Let users choose the Spanish voice (es-ES or es-MX) and English voice; flag when the browser has no good voice</p>
+                <p class="rec-why"><span>Why:</span> TTS quality varies; the target variety matters for learners in Spain</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Teachers</span>
+                <p class="rec-what">Add shareable deep links per deck, a printable list or PDF view, and &ldquo;assign this deck&rdquo; links that need no student accounts</p>
+                <p class="rec-why"><span>Why:</span> Wordwall&rsquo;s free cap and Quizlet&rsquo;s paywall leave teachers without a free option; no student data to manage</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Ecosystem</span>
+                <p class="rec-what">Publish decks as open JSON/CSV and offer an Anki export</p>
+                <p class="rec-why"><span>Why:</span> Turns Kartky into a starter deck for Anki users and guarantees users permanent access to the content</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Monetization</span>
+                <p class="rec-what">Donations (Monobank jar, GitHub Sponsors), grants from NGOs or refugee-integration programmes, and clearly labelled sponsored decks; no ads or tracking</p>
+                <p class="rec-why"><span>Why:</span> Only 22% of Ukrainians pay for media, mostly &le;60&nbsp;UAH/month; ads would destroy the main differentiator</p>
+              </li>
+            </ol>
+          </div>
+
+          <h3 id="monetization">On monetization</h3>
+          <p>The realistic conclusion is that Kartky should not try to charge Ukrainian learners directly. Low willingness to pay, years of free offers from Babbel and Promova, and the trust value of &ldquo;free forever&rdquo; all point the same way. If a paid layer ever makes sense, it belongs at the institutional level: school, NGO or employer packs tied to the civil-service English requirements.</p>
+          <p>Consumer price anchors in the category are about <strong>$36–80 a year</strong> (Quizlet Plus $35.99, WordUp Pro $49, Lingvist and Clozemaster about $80; <a href="https://recurdash.com/subscription-pricing/quizlet-plus" target="_blank" rel="noopener">recurdash</a>, <a href="https://apppricinglab.com/app/apple/1365078730" target="_blank" rel="noopener">apppricinglab</a>, <a href="https://apps.apple.com/us/app/-/id1149199075" target="_blank" rel="noopener">App Store</a>), but those prices are set for Western markets and do not carry over to Ukraine.</p>
+
+          <h3 id="open-questions">Open questions to resolve before committing marketing effort</h3>
+          <ol class="questions">
+            <li>Whether Duolingo now offers Spanish from Ukrainian, which determines how open the Spanish niche really is.</li>
+            <li>Whether Promova&rsquo;s free access for Ukrainians is being extended.</li>
+            <li>How much Ukrainian-language search demand exists for topic vocabulary; no Google Trends or keyword data was found.</li>
+          </ol>
+        </section>
+
+        <section id="conclusion" aria-labelledby="conclusion-h">
+          <h2 id="conclusion-h"><span class="num">08</span>Conclusion</h2>
+          <p>The research changes the question from &ldquo;can a static flashcard site compete with Duolingo?&rdquo; to &ldquo;who serves the learners incumbents push away?&rdquo; The answer is that almost no one does. Price is not the main problem. A free full English course is already available to Ukrainians, and Kartky is not unusual in being free. What competitors have taken away is friction-free, trustworthy access to content: through paywalls, logins, energy meters, withdrawn decks and data collection.</p>
+          <blockquote class="pullquote">Kartky&rsquo;s constraints, which look like limitations against the feature matrix, are its product.</blockquote>
+          <p>It needs exactly one capability it currently lacks, spaced retrieval, and it can add that without breaking any of them.</p>
+          <p>The underrated opportunity is Spanish. It is a small share of Ukrainian learners nationally, but it is concentrated in a reachable diaspora that has a practical need for everyday words, is underserved in its native language, and organises itself on Telegram. A product that becomes the default Ukrainian-language Spanish vocabulary resource for that community, and then uses the credibility to win English learners through search and Future Perfect, has a more defensible path than one that starts in the crowded English market.</p>
+        </section>
+
+        <section id="sources" class="sources" aria-labelledby="sources-h">
+          <h2 id="sources-h"><span class="num">09</span>Sources</h2>
+          <p>Every source cited in the report, grouped by the section where it first appears. Market figures and prices come from a mix of company filings, analyst reports and third-party trackers; see the caveats in each section.</p>
+          <h3>Market size &amp; trends</h3>
+          <ol start="1">
+            <li><a href="https://www.giikorea.co.kr/report/qyr1862207-language-learning-application-global-market-share.html" target="_blank" rel="noopener">QYResearch via GIIKorea</a> <span class="host">giikorea.co.kr</span></li>
+            <li><a href="https://meticulousresearch.com/reports/language-learning-apps-market-5658" target="_blank" rel="noopener">Meticulous Research</a> <span class="host">meticulousresearch.com</span></li>
+            <li><a href="https://www.marketresearchfuture.com/zh-cn/reports/language-learning-apps-market-38354" target="_blank" rel="noopener">MRFR</a> <span class="host">marketresearchfuture.com</span></li>
+            <li><a href="https://www.webull.com/news/14049548037866496" target="_blank" rel="noopener">Webull/ResearchAndMarkets</a> <span class="host">webull.com</span></li>
+            <li><a href="https://www.sec.gov/Archives/edgar/data/0001562088/000162828026053299/q2fy26duolingo6-30x26share.htm" target="_blank" rel="noopener">Duolingo Q2 2026 shareholder letter (SEC)</a> <span class="host">sec.gov</span></li>
+            <li><a href="https://skillademia.com/statistics/babbel-statistics/" target="_blank" rel="noopener">Skillademia</a> <span class="host">skillademia.com</span></li>
+            <li><a href="https://blog.duolingo.com/2025-duolingo-language-report/" target="_blank" rel="noopener">Duolingo 2025 Language Report</a> <span class="host">blog.duolingo.com</span></li>
+            <li><a href="https://techcrunch.com/2024/12/10/openai-backed-speak-raises-78m-at-1b-valuation-to-help-users-learn-languages-by-talking-out-loud" target="_blank" rel="noopener">TechCrunch — Speak raises $78M at $1B valuation</a> <span class="host">techcrunch.com</span></li>
+            <li><a href="https://techcrunch.com/2024/05/22/praktika-raises-35-5m-to-use-ai-avatars-to-make-learning-languages-feel-more-natural" target="_blank" rel="noopener">TechCrunch — Praktika raises $35.5M</a> <span class="host">techcrunch.com</span></li>
+            <li><a href="https://fox6now.com/news/duolingo-148-courses-ai" target="_blank" rel="noopener">FOX6</a> <span class="host">fox6now.com</span></li>
+            <li><a href="https://www.techrepublic.com/article/news-duolingo-ai-strategy-backlash/" target="_blank" rel="noopener">TechRepublic</a> <span class="host">techrepublic.com</span></li>
+            <li><a href="https://www.sherwood.news/markets/duolingo-q3-2025-earnings-user-growth-miss-guidance" target="_blank" rel="noopener">Sherwood News</a> <span class="host">sherwood.news</span></li>
+            <li><a href="https://sensortower.com/blog/empowering-education-global-trends-and-opportunities-in-ed-tech" target="_blank" rel="noopener">Sensor Tower</a> <span class="host">sensortower.com</span></li>
+          </ol>
+          <h3>Competitor landscape</h3>
+          <ol start="14">
+            <li><a href="https://toolradar.com/guides/best-language-learning-apps" target="_blank" rel="noopener">Toolradar</a> <span class="host">toolradar.com</span></li>
+            <li><a href="https://support.babbel.com/hc/en-gb/articles/4985331352980-Courses-for-Ukrainian-refugees" target="_blank" rel="noopener">Babbel support</a> <span class="host">support.babbel.com</span></li>
+            <li><a href="https://apps.apple.com/bb/app/id1460782849" target="_blank" rel="noopener">App Store — Promova</a> <span class="host">apps.apple.com</span></li>
+            <li><a href="https://en.wikipedia.org/wiki/Promova" target="_blank" rel="noopener">Wikipedia — Promova</a> <span class="host">en.wikipedia.org</span></li>
+            <li><a href="https://store.entrepreneur.com/sales/mondly-premium-lifetime-subscription-all-languages" target="_blank" rel="noopener">Mondly lifetime subscription — reseller page</a> <span class="host">store.entrepreneur.com</span></li>
+            <li><a href="https://www.mindomax.com/is-anki-free" target="_blank" rel="noopener">mindomax — Is Anki free?</a> <span class="host">mindomax.com</span></li>
+            <li><a href="https://recurdash.com/subscription-pricing/quizlet-plus" target="_blank" rel="noopener">recurdash — Quizlet Plus pricing</a> <span class="host">recurdash.com</span></li>
+            <li><a href="https://en.wikipedia.org/wiki/Quizlet" target="_blank" rel="noopener">Wikipedia — Quizlet</a> <span class="host">en.wikipedia.org</span></li>
+            <li><a href="https://en.wikipedia.org/wiki/Memrise" target="_blank" rel="noopener">Wikipedia — Memrise</a> <span class="host">en.wikipedia.org</span></li>
+            <li><a href="https://subger.com/en/service/memrise" target="_blank" rel="noopener">subger — Memrise</a> <span class="host">subger.com</span></li>
+            <li><a href="https://lingvist.com/" target="_blank" rel="noopener">Lingvist (lingvist.com)</a> <span class="host">lingvist.com</span></li>
+            <li><a href="https://subger.com/en/service/lingvist" target="_blank" rel="noopener">subger — Lingvist</a> <span class="host">subger.com</span></li>
+            <li><a href="https://languagedrops.com/" target="_blank" rel="noopener">Drops (languagedrops.com)</a> <span class="host">languagedrops.com</span></li>
+            <li><a href="https://reword.app/" target="_blank" rel="noopener">ReWord (reword.app)</a> <span class="host">reword.app</span></li>
+            <li><a href="https://apps.apple.com/ru/app/%D0%B8%D1%81%D0%BF%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%D0%B9-%D1%8F%D0%B7%D1%8B%D0%BA-%D1%83%D1%87%D0%B8%D1%82%D1%8C-%D1%81%D0%BB%D0%BE%D0%B2%D0%B0/id1397753065?l=uk" target="_blank" rel="noopener">App Store</a> <span class="host">apps.apple.com</span></li>
+            <li><a href="https://apps.apple.com/us/app/-/id1149199075" target="_blank" rel="noopener">App Store — Clozemaster</a> <span class="host">apps.apple.com</span></li>
+            <li><a href="https://www.clozemaster.com/languages" target="_blank" rel="noopener">Clozemaster — languages</a> <span class="host">clozemaster.com</span></li>
+            <li><a href="https://www.apkmirror.com/apk/poas/reword-learn-english-language" target="_blank" rel="noopener">APKMirror — ReWord English</a> <span class="host">apkmirror.com</span></li>
+            <li><a href="https://mezha.ua/en/news/promova-u-topi-zrostayuchih-kompaniy-time-301596/" target="_blank" rel="noopener">Mezha — Promova recognition (TIME/Statista)</a> <span class="host">mezha.ua</span></li>
+            <li><a href="https://www.kmu.gov.ua/news/vyvchaty-anhliisku-bezoplatno-platforma-promova-stala-chastynoiu-natsionalnoi-prohramy-future-perfect" target="_blank" rel="noopener">KMU — Promova joins Future Perfect</a> <span class="host">kmu.gov.ua</span></li>
+            <li><a href="https://euromaidanpress.com/2024/09/20/babbel-extends-free-courses-in-three-languages-for-ukrainians" target="_blank" rel="noopener">Euromaidan Press</a> <span class="host">euromaidanpress.com</span></li>
+            <li><a href="https://blog.duolingo.com/duolingo-statement-ukraine" target="_blank" rel="noopener">Duolingo blog</a> <span class="host">blog.duolingo.com</span></li>
+            <li><a href="https://mezha.ua/news/duolingo-gen-ai-148-kursiv-301580/amp/" target="_blank" rel="noopener">Mezha — Duolingo 148 AI courses</a> <span class="host">mezha.ua</span></li>
+            <li><a href="https://hunted.space/product/quenti" target="_blank" rel="noopener">hunted.space — Quenti</a> <span class="host">hunted.space</span></li>
+            <li><a href="https://refold.la/blog/a-fun-new-flashcard-app-for-language-learning" target="_blank" rel="noopener">Refold</a> <span class="host">refold.la</span></li>
+            <li><a href="https://wordwall.net/en/price-plans" target="_blank" rel="noopener">Wordwall</a> <span class="host">wordwall.net</span></li>
+            <li><a href="https://hunted.space/product/penguen-io" target="_blank" rel="noopener">hunted.space — penguen.io</a> <span class="host">hunted.space</span></li>
+            <li><a href="https://dk.com/en-us/products/9780744080032-ukrainian-english-bilingual-visual-dictionary" target="_blank" rel="noopener">DK</a> <span class="host">dk.com</span></li>
+            <li><a href="https://www.education.ua/blog/49623/" target="_blank" rel="noopener">education.ua</a> <span class="host">education.ua</span></li>
+          </ol>
+          <h3>Demand in Ukraine &amp; Spain</h3>
+          <ol start="43">
+            <li><a href="https://www.kmu.gov.ua/news/99-ukraintsiv-uvazhaiut-shcho-potribno-vyvchaty-inozemni-movy-doslidzhennia-mintsyfry-usaid-ta-kmis" target="_blank" rel="noopener">KMU — KIIS / Ministry of Digital Transformation survey</a> <span class="host">kmu.gov.ua</span></li>
+            <li><a href="https://vikna.tv/dozvillia/yakyj-vidsotok-ukrayincziv-volodiye-inozemnymy-movamy-opytuvannya-kmis/amp/" target="_blank" rel="noopener">Vikna</a> <span class="host">vikna.tv</span></li>
+            <li><a href="https://www.ef.com/wwen/epi/regions/europe/ukraine/" target="_blank" rel="noopener">EF EPI</a> <span class="host">ef.com</span></li>
+            <li><a href="https://osvita.ua/test/rez_zno/95651/" target="_blank" rel="noopener">osvita.ua — NMT 2025 registrations</a> <span class="host">osvita.ua</span></li>
+            <li><a href="https://interfax.com.ua/news/general/1136511.html" target="_blank" rel="noopener">Interfax-Ukraine</a> <span class="host">interfax.com.ua</span></li>
+            <li><a href="https://www.inclusion.gob.es/en/w/el-numero-de-personas-de-nacionalidad-ucraniana-con-autorizacion-de-residencia-en-espana-supera-las-353.000-en-junio-de-2026" target="_blank" rel="noopener">Spanish Ministry of Inclusion</a> <span class="host">inclusion.gob.es</span></li>
+            <li><a href="https://www.envoyglobal.com/news-alert/spain-extends-temporary-protection-cards-for-ukrainian-nationals-through-march-2027/" target="_blank" rel="noopener">Envoy Global</a> <span class="host">envoyglobal.com</span></li>
+            <li><a href="https://news.dtkt.ua/society/community/91059-angliiska-iak-mova-miznarodnogo-spilkuvannia-v-ukrayini-dije-zakon" target="_blank" rel="noopener">DTKT</a> <span class="host">news.dtkt.ua</span></li>
+            <li><a href="https://kadroland.com/news/9435-xto-zobovyazanii-znati-angliisku-kabmin-zatverdiv-novi-pravila-dlya-posad" target="_blank" rel="noopener">Kadroland</a> <span class="host">kadroland.com</span></li>
+            <li><a href="https://jurliga.ligazakon.net/news/235231_zatverdzheno-poryadok-vstanovlennya-ta-viplati-derzhsluzhbovtsyam-nadbavki-za-volodnnya-anglyskoyu-movoyu" target="_blank" rel="noopener">Ligazakon</a> <span class="host">jurliga.ligazakon.net</span></li>
+            <li><a href="https://osvita.ua/vnz/reports/management/94621/" target="_blank" rel="noopener">osvita.ua — civil-servant English bonus</a> <span class="host">osvita.ua</span></li>
+            <li><a href="https://itc.ua/ua/novini/future-perfect-v-ukrayini-zapuskayut-natsionalnu-programu-z-populyaryzatsiyi-anglijskoyi-iz-bezplatnymy-kursamy-dlya-gromadyan/amp/" target="_blank" rel="noopener">ITC.ua</a> <span class="host">itc.ua</span></li>
+            <li><a href="https://kyivindependent.com/telegram-dominates-and-tiktok-grows-in-news-consumption-in-ukraine-fueling-privacy-and-propaganda-concerns/" target="_blank" rel="noopener">Kyiv Independent/Internews</a> <span class="host">kyivindependent.com</span></li>
+            <li><a href="https://finance.ua/ua/goodtoknow/skilki-kosztue-vyvczyty-anglijsku" target="_blank" rel="noopener">Finance.ua — cost of learning English</a> <span class="host">finance.ua</span></li>
+            <li><a href="https://dou.ua/calendar/54966/" target="_blank" rel="noopener">DOU</a> <span class="host">dou.ua</span></li>
+            <li><a href="https://gradus.app/en/open-reports/research-media-consumption-ukraine" target="_blank" rel="noopener">Gradus</a> <span class="host">gradus.app</span></li>
+            <li><a href="https://www.pravda.com.ua/eng/news/2025/09/25/7532494" target="_blank" rel="noopener">Ukrainska Pravda</a> <span class="host">pravda.com.ua</span></li>
+            <li><a href="https://en.wikipedia.org/wiki/LinguaLeo" target="_blank" rel="noopener">Wikipedia — LinguaLeo</a> <span class="host">en.wikipedia.org</span></li>
+          </ol>
+          <h3>Positioning</h3>
+          <ol start="61">
+            <li><a href="https://androidauthority.com/quitting-duolingo-energy-system-3599842" target="_blank" rel="noopener">Android Authority — Duolingo energy system</a> <span class="host">androidauthority.com</span></li>
+            <li><a href="https://uxdesign.cc/duolingos-small-ui-switch-that-changes-everything-fae257203633" target="_blank" rel="noopener">UX Collective</a> <span class="host">uxdesign.cc</span></li>
+            <li><a href="https://baronnews.com/2022/10/20/quizlets-upgrade-isnt-an-upgrade-at-all/" target="_blank" rel="noopener">Baron News</a> <span class="host">baronnews.com</span></li>
+            <li><a href="https://www.remnote.com/blog/best-quizlet-alternatives" target="_blank" rel="noopener">RemNote</a> <span class="host">remnote.com</span></li>
+            <li><a href="https://androidauthority.com/duolingo-xp-boost-ux-trap-3674572" target="_blank" rel="noopener">Android Authority — Duolingo XP boosts</a> <span class="host">androidauthority.com</span></li>
+            <li><a href="https://thedecisionlab.com/es-ES/insights/consumer-insights/streak-creep-the-perils-of-too-much-gamification" target="_blank" rel="noopener">The Decision Lab</a> <span class="host">thedecisionlab.com</span></li>
+            <li><a href="https://amp.knowyourmeme.com/editorials/guides/whats-the-duolingo-ai-first-controversy-the-ceos-pro-ai-message-and-the-online-backlash-explained" target="_blank" rel="noopener">Know Your Meme</a> <span class="host">amp.knowyourmeme.com</span></li>
+            <li><a href="https://surfshark.com/research/chart/data-hungry-language-apps" target="_blank" rel="noopener">Surfshark</a> <span class="host">surfshark.com</span></li>
+            <li><a href="https://www.g2.com/products/anki/reviews_and_filters" target="_blank" rel="noopener">G2</a> <span class="host">g2.com</span></li>
+          </ol>
+          <h3>Learning science</h3>
+          <ol start="70">
+            <li><a href="https://www.mdpi.com/2076-328X/15/11/1540/xml" target="_blank" rel="noopener">MDPI 2025 (describes Webb, Yanagisawa &amp; Uchihara 2020)</a> <span class="host">mdpi.com</span></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9485613" target="_blank" rel="noopener">Frontiers in Psychology</a> <span class="host">pmc.ncbi.nlm.nih.gov</span></li>
+            <li><a href="https://www.ils.unimas.my/images/pdf/v4n1/ILS_V4N1_Tahriri.pdf" target="_blank" rel="noopener">Tahriri, ILS UNIMAS (PDF)</a> <span class="host">ils.unimas.my</span></li>
+            <li><a href="https://www.earticle.net/Article/A240889" target="_blank" rel="noopener">Yoon &amp; Ahn</a> <span class="host">earticle.net</span></li>
+            <li><a href="https://ir.lib.uwo.ca/etd/7402" target="_blank" rel="noopener">Uchihara, Western University</a> <span class="host">ir.lib.uwo.ca</span></li>
+            <li><a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/contextual-learning-and-retention-of-phrasal-verbs/128F4CAA5D71E7146B0F579E919AF794" target="_blank" rel="noopener">Cambridge Core — SSLA 2025, contextual learning of phrasal verbs</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://pressto.amu.edu.pl/index.php/ssllt/article/view/49487" target="_blank" rel="noopener">SSLLT</a> <span class="host">pressto.amu.edu.pl</span></li>
+            <li><a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/effects-of-massing-and-spacing-on-the-learning-of-semantically-related-and-unrelated-words/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Nakata &amp; Suzuki — Cambridge Core, SSLA 2019</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://scholars.nthu.edu.tw/esploro/outputs/graduate/台灣國小外國語言社團學生語意群集與主題群集學習成效之研究/9957797821906774" target="_blank" rel="noopener">NTHU review</a> <span class="host">scholars.nthu.edu.tw</span></li>
+            <li><a href="https://www.wgtn.ac.nz/__data/assets/pdf_file/0018/1626120/2006-How-large-a-vocab.pdf" target="_blank" rel="noopener">Nation 2006 — How large a vocabulary (PDF)</a> <span class="host">wgtn.ac.nz</span></li>
+            <li><a href="https://www.oxfordlearnersdictionaries.com/about/wordlists/oxford3000-5000" target="_blank" rel="noopener">Oxford Learner&#x27;s Dictionaries</a> <span class="host">oxfordlearnersdictionaries.com</span></li>
+            <li><a href="https://linguistlist.org/issues/17/1962/" target="_blank" rel="noopener">LINGUIST List</a> <span class="host">linguistlist.org</span></li>
+          </ol>
+          <h3>Recommendations &amp; monetization</h3>
+          <ol start="82">
+            <li><a href="https://apppricinglab.com/app/apple/1365078730" target="_blank" rel="noopener">apppricinglab</a> <span class="host">apppricinglab.com</span></li>
+          </ol>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="r-foot">
+    <span>Kartky &middot; Competitor &amp; market research &middot; Updated October 2026</span>
+    <a href="./index.html">Back to flashcards</a>
+  </footer>
+</body>
+</html>
