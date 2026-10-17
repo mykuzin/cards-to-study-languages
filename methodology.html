@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning methodology — Kartky</title>
+  <meta name="description" content="Open, license- and patent-free methodology for Kartky's topic-based vocabulary cards: spaced retrieval, the FSRS scheduler, topic and frequency selection, openly licensed data sources, legal pitfalls, and a phased build plan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="report.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./index.html">
+      <span class="brand-mark" aria-hidden="true"></span>
+      Kartky
+    </a>
+    <a class="back-link" href="./index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      <span>Back to</span> flashcards
+    </a>
+  </header>
+
+  <main class="r-main">
+    <header class="r-head">
+      <p class="eyebrow">Methodology research</p>
+      <h1>Build Kartky on <em>open science</em>, not brands</h1>
+      <p class="r-sub">Which proven, license- and patent-free methods a topic-based vocabulary app can rest on, which open data it can ship, where the legal traps are, and what Kartky should build first.</p>
+      <ul class="r-meta">
+        <li class="updated">Updated October 2026</li>
+        <li>Ukraine, EU &amp; US law</li>
+        <li>Sources linked inline</li>
+        <li>Not legal advice</li>
+      </ul>
+    </header>
+
+    <section class="findings" aria-labelledby="findings-title">
+      <h2 id="findings-title">Key findings</h2>
+      <ul>
+        <li class="finding good">
+          <span class="tag">The methods</span>
+          <b>Free for anyone to use</b>
+          <p>Spaced repetition, retrieval practice, Leitner boxes, topic grouping and CEFR levels are unprotectable methods under Ukrainian, EU and US law. No live patent covers basic spaced-repetition flashcards.</p>
+        </li>
+        <li class="finding warn">
+          <span class="tag">Biggest gap</span>
+          <b>No spaced retrieval yet</b>
+          <p>Spacing has a medium-to-large effect in L2 learning, and repeated testing roughly doubled one-week retention in a classic study. Kartky&rsquo;s known/learning marks never bring a word back.</p>
+        </li>
+        <li class="finding good">
+          <span class="tag">Scheduler</span>
+          <b>FSRS via ts-fsrs (MIT)</b>
+          <p>The most accurate open scheduler in a benchmark of ~350M Anki reviews. Loads with a plain <code>&lt;script&gt;</code> tag; default parameters work without any per-user data.</p>
+        </li>
+        <li class="finding">
+          <span class="tag">Topic decks</span>
+          <b>Frequency picks, topics group</b>
+          <p>Drilling close relatives (mother, father, aunt, uncle) together causes confusion errors. Build decks around scenarios, choose words by frequency, and keep near-neighbours apart.</p>
+        </li>
+        <li class="finding warn">
+          <span class="tag">Legal risk</span>
+          <b>It sits in content, not method</b>
+          <p>A 15-year database right in the EU and Ukraine makes bulk-copying Oxford 3000, the English Vocabulary Profile or Cervantes inventories risky. Non-commercial and GPL data are the other traps.</p>
+        </li>
+        <li class="finding good">
+          <span class="tag">Open data</span>
+          <b>A source for every field</b>
+          <p>CEFR-J and NGSL for word lists, wordfreq for frequency, Tatoeba for sentences, Open English WordNet for definitions, Twemoji for images, the browser&rsquo;s speech engine for audio.</p>
+        </li>
+      </ul>
+    </section>
+
+    <div class="r-layout">
+      <nav class="toc" aria-labelledby="toc-title">
+        <h2 id="toc-title">Contents</h2>
+        <ol>
+          <li><a href="#summary">Executive summary</a></li>
+          <li><a href="#open-methods">The methods are open</a>
+            <ol>
+              <li><a href="#patents">Patents</a></li>
+              <li><a href="#named-methods">Named methods &amp; CEFR</a></li>
+            </ol>
+          </li>
+          <li><a href="#retrieval">Retrieval &amp; spacing</a>
+            <ol>
+              <li><a href="#card-fields">Card fields</a></li>
+            </ol>
+          </li>
+          <li><a href="#fsrs">The FSRS scheduler</a></li>
+          <li><a href="#topics">Topics &amp; frequency</a></li>
+          <li><a href="#data">Open data sources</a></li>
+          <li><a href="#pitfalls">Legal pitfalls</a></li>
+          <li><a href="#plan">Build plan</a>
+            <ol>
+              <li><a href="#phase-1">Phase 1: Scheduling</a></li>
+              <li><a href="#phase-2">Phase 2: Content</a></li>
+              <li><a href="#phase-3">Phase 3: Practice</a></li>
+              <li><a href="#phase-4">Phase 4: Growth</a></li>
+            </ol>
+          </li>
+          <li><a href="#conclusion">Conclusion</a></li>
+          <li><a href="#sources">Sources</a></li>
+        </ol>
+      </nav>
+
+      <article class="content">
+
+        <section id="summary" aria-labelledby="summary-h">
+          <h2 id="summary-h"><span class="num">01</span>Executive summary</h2>
+          <p class="lede"><strong>Yes. Every method a vocabulary flashcard app needs is free to use.</strong> That covers spaced repetition, retrieval practice, two-way recall, topic grouping and CEFR-style levelling. Ukrainian, US and EU law all state outright that methods, procedures and systems are not protected by copyright, and patent law in Ukraine and at the European Patent Office excludes methods of intellectual activity &ldquo;as such&rdquo;.</p>
+          <p>The one early broad US patent on adaptive spaced repetition, Cerego&rsquo;s US 6,652,283, expired in 2019 (<a href="https://zakon.rada.gov.ua/laws/show/2811-20" target="_blank" rel="noopener">zakon.rada.gov.ua 2811-IX</a>; <a href="https://patents.google.com/patent/US6652283B1/en" target="_blank" rel="noopener">Google Patents</a>). The method with the strongest evidence is also the one Kartky is missing: <strong>actively recalling words and reviewing them at spaced intervals.</strong> An L2 meta-analysis of 48 experiments found spacing has a medium-to-large effect, and in one classic study repeated testing roughly doubled one-week retention compared with re-studying (<a href="https://ir.lib.uwo.ca/etd/8600/" target="_blank" rel="noopener">Western University</a>; <a href="https://www.purdue.edu/uns/x/2008a/080214KarpickeTest.html" target="_blank" rel="noopener">Purdue</a>).</p>
+          <p>The best open scheduler is FSRS, available as the <strong>MIT-licensed ts-fsrs library</strong>. It runs in the browser with no build step and leads an open benchmark of hundreds of millions of Anki reviews (<a href="https://github.com/open-spaced-repetition/srs-benchmark" target="_blank" rel="noopener">srs-benchmark</a>). Topic-based study is defensible, with one condition. Drilling close co-hyponyms together produces confusion errors, so Kartky should <strong>let frequency choose the words, let the topic group them around scenarios, and shuffle sessions so near-neighbours never sit side by side</strong> (<a href="https://www.cambridge.org/core/product/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Nakata &amp; Suzuki 2019</a>).</p>
+          <p>The legal risk sits in <strong>content, not in method</strong>: copying Oxford 3000, the English Vocabulary Profile or the Instituto Cervantes inventories; using non-commercial or GPL datasets; bundling Anki&rsquo;s AGPL code; or claiming &ldquo;official CEFR alignment&rdquo;. Open alternatives exist for every card field.</p>
+
+          <div class="table-wrap">
+            <table class="summary">
+              <caption>The short answers</caption>
+              <thead>
+                <tr><th scope="col">Question</th><th scope="col">Answer</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Are the methods open?</th>
+                  <td>Yes. Spaced repetition, Leitner boxes, retrieval practice, topic grouping and CEFR levelling are unprotectable ideas in Ukraine, the EU and the US. SM-2 is published, and SuperMemo asks for a copyright note. FSRS is open source.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Which methods are proven?</th>
+                  <td>Spaced retrieval in both translation directions, about five spaced retrievals per word, the L1 translation as the main meaning cue, and explicit collocations. Pictures and keyword mnemonics are optional at best.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Which open data?</th>
+                  <td>NGSL/NAWL (CC BY-SA 4.0), CEFR-J (free with citation), Octanove C1–C2 (CC BY-SA 4.0), wordfreq/FrequencyWords (CC BY-SA 4.0), Tatoeba (CC BY 2.0 FR, CC0 subset), Open English WordNet (CC BY 4.0), Wikidata Lexemes (CC0), Twemoji (CC BY 4.0).</td>
+                </tr>
+                <tr>
+                  <th scope="row">Main legal pitfalls</th>
+                  <td>EU and Ukrainian database rights (15 years) over curated lists; non-commercial sources (VESUM, ARASAAC, the Piper &ldquo;lessac&rdquo; voice); GPL/AGPL code and data; unqualified &ldquo;CEFR-certified&rdquo; claims; competitor branding.</td>
+                </tr>
+                <tr>
+                  <th scope="row">What to do first</th>
+                  <td>Replace the known/learning marks with FSRS scheduling in both directions and one mixed daily review queue. Then rebuild decks frequency-first and scenario-grouped, with a credits page that records provenance.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="open-methods" aria-labelledby="open-methods-h">
+          <h2 id="open-methods-h"><span class="num">02</span>No one can own spaced repetition or a topic deck</h2>
+          <p class="lede">The legal starting point decides what &ldquo;open methodology&rdquo; can mean. <strong>Ukraine&rsquo;s 2022 copyright law (No. 2811-IX, in force since 1 January 2023) says protection &ldquo;does not extend to … ideas, theories, principles, methods, procedures, processes, systems … even if they are expressed, described or illustrated in a work&rdquo;</strong> (Art. 7(3)).</p>
+          <p>The same law excludes from copyright the ideas and principles behind any part of a computer program, &ldquo;including its interface, logic, algorithms&rdquo; (Art. 20(3)) (<a href="https://zakon.rada.gov.ua/laws/show/2811-20" target="_blank" rel="noopener">zakon.rada.gov.ua 2811-IX</a>). US law says the same in 17 U.S.C. §102(b) (<a href="https://www.law.cornell.edu/uscode/text/17/102" target="_blank" rel="noopener">LII</a>), and <em>Baker v. Selden</em> (1879) held that a book describing a bookkeeping system gives no exclusive right to the system itself (<a href="https://supreme.justia.com/cases/federal/us/101/99/" target="_blank" rel="noopener">Justia</a>). In the EU, the Software Directive and the CJEU&rsquo;s <em>SAS Institute</em> ruling protect neither a program&rsquo;s functionality nor its interface ideas (<a href="https://eur-lex.europa.eu/eli/dir/2009/24/oj" target="_blank" rel="noopener">EUR-Lex 2009/24/EC</a>; <a href="https://curia.europa.eu/juris/liste.jsf?num=C-406/10" target="_blank" rel="noopener">CURIA C-406/10</a>).</p>
+          <blockquote class="pullquote">A flip card, an Again/Good button pair, a Leitner box, a spaced-review queue and a topic × level grid are all free to build.</blockquote>
+
+          <h3 id="patents">Patents: the method is open, a few features are fenced</h3>
+          <p>Ukraine&rsquo;s invention law excludes, when claimed &ldquo;as such&rdquo;, &ldquo;schemes, rules and methods&rdquo; of intellectual activity, computer programs, and &ldquo;forms of presenting information&rdquo; (<a href="https://zakon.rada.gov.ua/laws/show/3687-12" target="_blank" rel="noopener">zakon.rada.gov.ua 3687-XII</a>). EPC Article 52 has a parallel exclusion (<a href="https://www.epo.org/en/legal/epc/2020/a52.html" target="_blank" rel="noopener">EPO</a>). In the US, <em>Alice v. CLS Bank</em> makes abstract ideas implemented on a generic computer ineligible (<a href="https://supreme.justia.com/cases/federal/us/573/208/" target="_blank" rel="noopener">Justia</a>).</p>
+          <p>A Google Patents review of the sector finds no live patent on generic spaced-repetition flashcards. <strong>Cerego&rsquo;s 1999 patent on adaptive review scheduling is &ldquo;Expired – Lifetime&rdquo;</strong>, and Microsoft&rsquo;s generic &ldquo;adaptively-spaced repetition&rdquo; application was abandoned without a grant (<a href="https://patents.google.com/patent/US6652283B1/en" target="_blank" rel="noopener">US6652283B1</a>; <a href="https://patents.google.com/patent/US20120322043A1/en" target="_blank" rel="noopener">US20120322043A1</a>). What does exist is narrow and implementation-specific:</p>
+          <ul class="prose-list">
+            <li><strong>Rosetta Stone:</strong> speech and pronunciation-scoring patents (<a href="https://patents.google.com/?assignee=Rosetta+Stone" target="_blank" rel="noopener">Google Patents</a>).</li>
+            <li><strong>Quizlet:</strong> ML grading, distractor generation and image suggestion, plus a pending application on &ldquo;automatic selection of term study direction&rdquo; (<a href="https://patents.google.com/?assignee=Quizlet" target="_blank" rel="noopener">Google Patents</a>).</li>
+            <li><strong>Fluent Forever:</strong> an active patent, running to 2040, on a server-and-database flashcard structure with picture recommendation (<a href="https://patents.google.com/patent/US11288976B2/en" target="_blank" rel="noopener">US11288976B2</a>).</li>
+            <li><strong>Duolingo</strong> published its spaced-repetition model as an ACL paper with MIT-licensed code instead of patenting it (<a href="https://preview.aclanthology.org/fix_video/P16-1174.pdf" target="_blank" rel="noopener">Settles &amp; Meeder 2016</a>; <a href="https://github.com/duolingo/halflife-regression" target="_blank" rel="noopener">GitHub</a>).</li>
+          </ul>
+          <p>A plain spaced-repetition flashcard site sits on decades of prior art: Pimsleur in 1967, Leitner in 1972, and SuperMemo&rsquo;s first computer implementation in 1987 (<a href="https://www.supermemo.com/en/blog/licensing-and-copyrighting-of-supermemo-algorithms" target="_blank" rel="noopener">SuperMemo</a>). Patent density rises only when an app adds <strong>pronunciation scoring, ML-generated questions, adaptive placement tests, or automated image or direction recommendation</strong>.</p>
+          <p class="note"><b>Not a freedom-to-operate opinion.</b> Formal opinions typically cost USD 10,000 or more and lone developers rarely commission them (<a href="https://ipwatchdog.com/2015/06/27/freedom-to-operate-knowing-if-you-will-likely-infringe-a-patent/id=59081/" target="_blank" rel="noopener">IPWatchdog</a>; <a href="https://www.ukbusinessforums.co.uk/threads/general-patent-advice.222275/post-1737202" target="_blank" rel="noopener">UK Business Forums</a>). A self-search on Google Patents before building any of the riskier features above is the proportionate step.</p>
+
+          <h3 id="named-methods">Named methods and the CEFR come with conditions</h3>
+          <p><strong>SuperMemo World approves use of SM-2 in other software &ldquo;along with the copyright note&rdquo;</strong> and keeps later algorithms (SM-17 and up) as trade secrets (<a href="https://www.supermemo.com/en/blog/licensing-and-copyrighting-of-supermemo-algorithms" target="_blank" rel="noopener">SuperMemo</a>). The exact wording of the note could not be confirmed on an official page. <strong>Anki&rsquo;s code is AGPL-3.0-or-later</strong> (<a href="https://github.com/ankitects/anki/blob/main/LICENSE" target="_blank" rel="noopener">Anki LICENSE</a>), so copying its source would bring network source-disclosure duties; reimplementing the published algorithm ideas does not. &ldquo;Pimsleur&rdquo; and &ldquo;Michel Thomas Method&rdquo; are registered trademarks (<a href="https://trademark.justia.com/744/53/pimsleur-74453021.html" target="_blank" rel="noopener">Justia: PIMSLEUR</a>; <a href="https://michelthomas.com/landing-page/michel-thomas-products/" target="_blank" rel="noopener">michelthomas.com</a>). &ldquo;Inspired by the Leitner system&rdquo; is fine; those names must not become Kartky&rsquo;s own feature branding.</p>
+          <p>The CEFR is open as a set of categories and levels, but not as a seal of approval. <strong>The Council of Europe owns copyright in the CEFR text</strong>; its web content may be reproduced for education with credit and no fee, and other uses need permission (<a href="https://www.coe.int/web/common-european-framework-reference-languages/contact-form-for-translation-request" target="_blank" rel="noopener">CoE</a>; <a href="https://www.coe.int/fr/web/portal/copyright-licensing-permissions" target="_blank" rel="noopener">CoE copyright policy</a>). It also states that &ldquo;it is not the role of the Council of Europe to verify and validate&rdquo; claimed links to its levels (<a href="https://www.coe.int/en/web/common-european-framework-reference-languages/responsability-of-member-states" target="_blank" rel="noopener">CoE</a>; <a href="https://www.coe.int/en/web/common-european-framework-reference-languages/additional-material" target="_blank" rel="noopener">CoE further material</a>). Kartky can label decks A1–A2, B1–B2 and C1–C2, described as <strong>its own estimate</strong>, never &ldquo;certified&rdquo; or &ldquo;officially aligned&rdquo;.</p>
+        </section>
+
+        <section id="retrieval" aria-labelledby="retrieval-h">
+          <h2 id="retrieval-h"><span class="num">03</span>Retrieval plus spacing is the proven core Kartky lacks</h2>
+          <p class="lede">Kartky lets a learner flip a card and mark it &ldquo;I know it&rdquo; or &ldquo;Still learning&rdquo;. Nothing brings a word back at the right time. That is the gap, because spacing and retrieval are the best-replicated findings in learning science.</p>
+          <p>Cepeda and colleagues reviewed <strong>839 assessments from 317 experiments</strong>: spacing helps, and the best gap between sessions grows with how long the learner needs to remember (<a href="https://pubmed.ncbi.nlm.nih.gov/16719566/" target="_blank" rel="noopener">PubMed</a>). For second languages, Kim &amp; Webb&rsquo;s meta-analysis (<em>Language Learning</em>, 2022) pooled <strong>98 effect sizes from 48 experiments (N = 3,411)</strong>. Spacing had a <strong>medium-to-large effect</strong>; short gaps matched long gaps on immediate tests but lost on delayed tests; and <strong>equal and expanding schedules were statistically equivalent</strong> (<a href="https://onlinelibrary.wiley.com/doi/full/10.1111/lang.12479" target="_blank" rel="noopener">Wiley</a>; <a href="https://ir.lib.uwo.ca/etd/8600/" target="_blank" rel="noopener">Western University</a>). Exact effect sizes sit behind the paywall, and a later review cautions that some sub-analyses rest on few studies (<a href="https://pressto.amu.edu.pl/index.php/ssllt/article/view/49487" target="_blank" rel="noopener">SSLLT</a>). The practical reading holds: spacing at all, with enough total lag, matters far more than the exact interval curve.</p>
+          <p>Retrieval is the second pillar. Karpicke &amp; Roediger (<em>Science</em>, 2008) had students learn 40 Swahili–English pairs. Once an item had been recalled, repeated testing produced about <strong>80% one-week retention</strong>; repeated study alone about <strong>36%</strong>; dropping the item about 33%. Students&rsquo; own predictions did not track their results (<a href="https://www.brucehayes.org/Teaching/papers/2008_Roediger_Karpicke_Science.pdf" target="_blank" rel="noopener">Science PDF</a>; <a href="https://www.purdue.edu/uns/x/2008a/080214KarpickeTest.html" target="_blank" rel="noopener">Purdue</a>; percentages via a <a href="https://nonpf.confex.com/nonpf/2014co/webprogram/Handout/Session3922/FridayPlenaryLarsenHandout.pdf" target="_blank" rel="noopener">secondary handout</a>). Soderstrom, Kerr &amp; Bjork later showed part of re-study&rsquo;s poor showing came from spacing confounds; with those controlled, testing still helped more (<a href="https://sites.lifesci.ucla.edu/psych-bjorklab/wp-content/uploads/sites/13/2016/11/soderstrom_kerr.pdf" target="_blank" rel="noopener">Soderstrom et al.</a>).</p>
+          <blockquote class="pullquote">A flip only becomes retrieval practice if the learner genuinely tries to recall before revealing. The interface should ask for that pause.</blockquote>
+          <p><strong>How many retrievals?</strong> Nakata (2017) gave 98 learners 1, 3, 5 or 7 retrievals per word in a session. Five and seven beat one and three, even on a test more than two weeks later, though per minute spent a single retrieval was most efficient (<a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/does-repeated-practice-make-perfect-the-effects-of-withinsession-repeated-retrieval-on-second-language-vocabulary-learning/F14BA8A576CD2563D14CEA46E35D842E" target="_blank" rel="noopener">Cambridge Core</a>). His thesis found about <strong>five spaced retrievals</strong> most desirable, with benefits lasting at least four weeks; massed practice gave the best in-session scores and the worst post-test scores (<a href="https://listserv.linguistlist.org/pipermail/linguist/2013-September/065329.html" target="_blank" rel="noopener">Nakata thesis abstract</a>). So spread retrievals across days, and don&rsquo;t let a single first-sight &ldquo;I know it&rdquo; retire a card for good.</p>
+          <p><strong>Direction matters</strong> because practice transfers to the direction practised: productive practice wins on productive tests, receptive on receptive (<a href="https://www.redalyc.org/pdf/3398/339829651005.pdf" target="_blank" rel="noopener">Steinel, Hulstijn &amp; Steinel</a>), and receptive knowledge outruns productive, more so for rarer words (<a href="https://www.degruyterbrill.com/document/doi/10.1515/iral-2015-0022/html?lang=en" target="_blank" rel="noopener">Webb, IRAL</a>). <strong>L2→Ukrainian</strong> (see &ldquo;deadline&rdquo;, recall &ldquo;<span lang="uk">крайній термін</span>&rdquo;) builds recognition; <strong>Ukrainian→L2</strong> builds production and spelling. Kartky&rsquo;s flips run one way only; offering both, each as its own scheduled card, is the cheapest way to cover the productive half of word knowledge.</p>
+          <p>The broader evidence supports Kartky&rsquo;s basic design. Webb, Yanagisawa &amp; Uchihara&rsquo;s meta-analysis found <strong>flashcards and word lists produced &ldquo;relatively large gains&rdquo;</strong>, larger than writing or fill-in-the-blank tasks (<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.984211/full" target="_blank" rel="noopener">Frontiers 2022</a>). Incidental learning from reading and listening yields only <strong>9–18% of target words immediately and 6–17% after a delay</strong> (<a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0261444822000507" target="_blank" rel="noopener">Webb, Uchihara &amp; Yanagisawa 2023</a>). Elgort (2011) showed card-learned words produce automatic priming, the signature of real lexical integration (<a href="https://www.lextutor.ca/freq/lists_download/elgort_2011.pdf" target="_blank" rel="noopener">Elgort 2011</a>). A synthesis of 32 word-card studies found <strong>ready-made cards produced large effects more often than self-made ones (44% vs 20% of studies)</strong>, which favours curated decks, provided learners are shown how to use them (<a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.984211/full" target="_blank" rel="noopener">Frontiers 2022</a>).</p>
+
+          <h3 id="card-fields">The card fields Kartky already has mostly match the evidence</h3>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>Card fields and features against the evidence<small>What to keep, add, or treat as optional</small></caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">Field / feature</th><th scope="col">Evidence</th><th scope="col">Verdict</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="sticky-col">Ukrainian translation</th>
+                  <td>262 learners of French: gains favoured L1 equivalents over L2 definitions at both levels (<a href="https://cronfa.swan.ac.uk/Record/cronfa16614/Details" target="_blank" rel="noopener">Hennebry et al.</a>). Other studies: helpful or no different (<a href="https://prism.ucalgary.ca/handle/11023/980" target="_blank" rel="noopener">Calgary</a>; <a href="https://observatorio-cientifico.ua.es/documentos/652984f9993b0007e5d7c612?lang=fr" target="_blank" rel="noopener">Alicante</a>). A large Thai replication found no advantage (<a href="https://www.researchbank.ac.nz/server/api/core/bitstreams/4e43762f-32ea-4ae1-beb0-7d343abdfd3b/content" target="_blank" rel="noopener">Jahangard 2022</a>).</td>
+                  <td><span class="flag ok">Keep as main cue</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Target-language explanation</th>
+                  <td>Adds concept and range information and a little extra input.</td>
+                  <td><span class="flag ok">Keep</span></td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Three example sentences</th>
+                  <td>More encounters in informative contexts build broader knowledge (<a href="https://ae.fl.kpi.ua/article/view/250501/258676" target="_blank" rel="noopener">citing Webb 2007</a>). No study fixes an ideal number.</td>
+                  <td><span class="flag ok">Keep</span> vary structure and collocates</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Collocations</th>
+                  <td>17 studies, 3,859 participants: instruction improves collocation learning with <strong>d = 1.415</strong> (<a href="https://www.degruyterbrill.com/document/doi/10.1515/iral-2021-0218/html" target="_blank" rel="noopener">IRAL</a>); rarely acquired without attention (<a href="https://dermatology.cdlib.org/content/qt9hs2k98v/qt9hs2k98v.pdf?t=pkpchn" target="_blank" rel="noopener">study</a>).</td>
+                  <td><span class="flag">Add</span> &ldquo;make <b>a decision</b>&rdquo;, &ldquo;tomar <b>una decisión</b>&rdquo;</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Pictures</th>
+                  <td>No clear advantage for concrete words, better retention for abstract ones (<a href="https://iro.uiowa.edu/esploro/outputs/journalArticle/Imagery-and-verbal-coding-approaches-in/9984397917102771" target="_blank" rel="noopener">Shen</a>); learners are overconfident with pictures (<a href="https://osf.io/st4dn" target="_blank" rel="noopener">Carpenter &amp; Geller</a>).</td>
+                  <td><span class="no">Optional</span>, abstract words only</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Keyword mnemonics</th>
+                  <td>Faster initial learning, but keyword learners forgot more long-term than rote learners (<a href="https://stars.library.ucf.edu/facultybib1990/601" target="_blank" rel="noopener">Wang, Thomas &amp; Ouellette</a>).</td>
+                  <td><span class="no">Optional</span> learner-written &ldquo;memory hook&rdquo;</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="scroll-hint">Scroll the table sideways →</p>
+          <p>Kartky also covers only one of Nation&rsquo;s <strong>Four Strands</strong>. His model gives roughly equal time to meaning-focused input, meaning-focused output, language-focused learning and fluency development (<a href="https://ejournals.swu.ac.th/index.php/hm/article/view/3061/3080" target="_blank" rel="noopener">SWU journal</a>), and a flashcard app sits almost entirely in the language-focused quarter. The Involvement Load research points to cheap bridges: a meta-analysis of 42 studies found <strong>&ldquo;evaluation&rdquo; (using or comparing a word in context) carries the most weight</strong>, &ldquo;need&rdquo; a little, and &ldquo;search&rdquo; seems dispensable, though the model explains a modest share of variance (<a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/5C5984B326F37FBF3A3DDA3C0EB2996C/S0272263121000577a.pdf/involvement-load-hypothesis-plus-creating-an-improved-predictive-model-of-incidental-vocabulary-learning.pdf" target="_blank" rel="noopener">Yanagisawa &amp; Webb 2021</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9598591/" target="_blank" rel="noopener">Liu &amp; Reynolds 2022</a>). Three features follow: an ungraded &ldquo;write your own sentence&rdquo; prompt, a &ldquo;pick the right word&rdquo; choice between near-synonyms, and a timed review of known words for fluency.</p>
+        </section>
+
+        <section id="fsrs" aria-labelledby="fsrs-h">
+          <h2 id="fsrs-h"><span class="num">04</span>FSRS gives a no-backend app a best-in-class open scheduler</h2>
+          <p class="lede">With spaced retrieval settled as the method, the remaining choice is the algorithm. FSRS (Free Spaced Repetition Scheduler) is a community-driven open-source project that Anki adopted in version 23.10 in November 2023.</p>
+          <p>FSRS models three quantities per item: <strong>retrievability</strong>, the current probability of recall; <strong>stability</strong>, the days for recall to fall from 100% to 90%; and <strong>difficulty</strong>, which governs how fast stability grows (<a href="https://github.com/open-spaced-repetition/awesome-fsrs/wiki/ABC-of-FSRS" target="_blank" rel="noopener">ABC of FSRS</a>; <a href="https://changes.ankiweb.net/changes/23.10.html" target="_blank" rel="noopener">Anki changelog</a>). In the open srs-benchmark, covering about 10,000 Anki collections and roughly 350 million evaluated reviews, FSRS predicts recall more accurately than every other open alternative (<a href="https://github.com/open-spaced-repetition/srs-benchmark" target="_blank" rel="noopener">srs-benchmark</a>).</p>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>Open scheduling algorithms compared<small>Benchmark figures exclude same-day reviews</small></caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">Algorithm</th><th scope="col">Reference code licence</th><th scope="col">Log loss ↓</th><th scope="col">AUC ↑</th><th scope="col">Fit for Kartky</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row" class="sticky-col">FSRS-6 (21 params)</th><td>MIT (ts-fsrs)</td><td class="num-cell">0.3460</td><td class="num-cell">0.7034</td><td><span class="flag ok">Best accuracy; browser-ready</span></td></tr>
+                <tr><th scope="row" class="sticky-col">FSRS-7, default params</th><td>Open source</td><td class="num-cell">0.3620</td><td class="num-cell">0.7029</td><td>Shows defaults alone are competitive</td></tr>
+                <tr><th scope="row" class="sticky-col">FSRS-4.5</th><td>MIT (ts-fsrs)</td><td class="num-cell">0.3625</td><td class="num-cell">0.6891</td><td>Older version</td></tr>
+                <tr><th scope="row" class="sticky-col">Duolingo HLR (3 params)</th><td>MIT</td><td class="num-cell">0.4694</td><td class="num-cell">0.6369</td><td>Clearly weaker</td></tr>
+                <tr><th scope="row" class="sticky-col">Ebisu v2</th><td>Unlicense (public domain)</td><td class="num-cell">0.4989</td><td class="num-cell">0.6051</td><td>Weakest listed</td></tr>
+                <tr><th scope="row" class="sticky-col">SM-2</th><td>Published 1990; copyright note requested</td><td class="num-cell">—</td><td class="num-cell">—</td><td>Simple; FSRS project reports it is less efficient</td></tr>
+                <tr><th scope="row" class="sticky-col">Leitner boxes</th><td>Public 1970s method</td><td class="num-cell">—</td><td class="num-cell">—</td><td>Trivial v1 only</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">Sources: <a href="https://github.com/open-spaced-repetition/srs-benchmark" target="_blank" rel="noopener">srs-benchmark</a>; <a href="https://raw.githubusercontent.com/open-spaced-repetition/ts-fsrs/main/LICENSE" target="_blank" rel="noopener">ts-fsrs LICENSE</a>; <a href="https://github.com/duolingo/halflife-regression" target="_blank" rel="noopener">halflife-regression</a>; <a href="https://github.com/fasiha/ebisu" target="_blank" rel="noopener">Ebisu</a>; <a href="https://www.supermemo.com/en/wp-json/wp/v2/posts/34058" target="_blank" rel="noopener">SuperMemo</a>. SM-2 figures were not available in the benchmark&rsquo;s text table.</p>
+          <p>The FSRS project claims users need <strong>20–30% fewer reviews than with SM-2</strong> for the same retention, even on default parameters (<a href="https://github.com/open-spaced-repetition/awesome-fsrs/wiki/ABC-of-FSRS" target="_blank" rel="noopener">ABC of FSRS</a>). These are the project&rsquo;s own simulations, not independent trials. What tips the decision is practical: <strong>ts-fsrs is MIT-licensed, its current stable release is 5.4.2 (1 September 2026; a 6.0 beta is in progress), and it ships a UMD bundle that loads with a plain <code>&lt;script&gt;</code> tag</strong>, which suits Kartky&rsquo;s build-free vanilla JavaScript (<a href="https://registry.npmjs.org/ts-fsrs" target="_blank" rel="noopener">npm registry</a>; <a href="https://github.com/open-spaced-repetition/ts-fsrs" target="_blank" rel="noopener">GitHub</a>). Its API is small: <code>createEmptyCard()</code> starts a card, <code>fsrs().next(card, now, Rating.Good)</code> returns the updated card and a log entry, and <code>get_retrievability()</code> orders the queue. Defaults: desired retention 0.9, learning steps of 1 and 10 minutes, and fuzz on so cards learned together don&rsquo;t all fall due the same day (<a href="https://github.com/open-spaced-repetition/ts-fsrs/blob/main/packages/fsrs/README.md" target="_blank" rel="noopener">README</a>).</p>
+          <p><strong>Defaults suit a no-account site.</strong> Optimising FSRS to an individual needs at least &ldquo;a few hundred&rdquo; reviews; below that the defaults are used anyway (<a href="https://docs.ankiweb.net/deck-options.html" target="_blank" rel="noopener">Anki manual</a>). Anki&rsquo;s manual also supplies the backlog rules: keep desired retention at 90%, since workload climbs steeply above it; when reviews pile up, stop introducing new cards; and review in order of ascending retrievability so the cards most at risk come first. Because FSRS uses the actual elapsed time at the next review, a learner who skips a week needs no special catch-up logic.</p>
+          <p><strong>Storage is not a constraint.</strong> 18 decks × 50 words = 900 words; two directions make 1,800 cards. At roughly 100 bytes of JSON per card, the whole collection takes a couple of hundred kilobytes of localStorage. Review logs are the only part that grows without limit, so keep only the last few reviews per card.</p>
+        </section>
+
+        <section id="topics" aria-labelledby="topics-h">
+          <h2 id="topics-h"><span class="num">05</span>Topic decks work when frequency picks the words and themes group them</h2>
+          <p class="lede">Organising decks by topic and level is well supported as an idea. It needs care in how words are chosen and sequenced.</p>
+          <p>The CEFR itself contains no word lists. It provides four domains of language use (personal, public, occupational, educational) and inherits its thematic content from the Council of Europe&rsquo;s <em>Threshold 1990</em> (<a href="https://ecml.at/Portals/1/3MTP/ECEP/training-kit/PageEN/P/Worksheet_B_Domains.pdf" target="_blank" rel="noopener">ECML</a>). Three theme lists are worth aligning to, and Kartky&rsquo;s three topics map cleanly onto all of them:</p>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>Theme taxonomies Kartky can use as a roadmap<small>Theme names are free to use; the books&rsquo; word lists are copyrighted</small></caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">Framework</th><th scope="col">Structure</th><th scope="col">Kartky topic mapping</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="sticky-col">Threshold 1990</th>
+                  <td>14 themes: personal identification; house and home; daily life; free time; travel; relations with other people; health and body care; education; shopping; food and drink; services; places; language; weather (<a href="https://www.cambridge.org/core/books/threshold-1990/specific-notions/65A192D134F9E24DC236BE2A06D2ED18" target="_blank" rel="noopener">Cambridge Core</a>)</td>
+                  <td>Family → relations with other people · Cuisine → food and drink · Travel → travel</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Instituto Cervantes <em>Plan Curricular</em> (2006)</th>
+                  <td>Specific notions in 20 thematic areas, graded A1–C2 (<a href="https://ebuah.uah.es/xmlui/handle/10017/30241" target="_blank" rel="noopener">Univ. de Alcalá</a>; <a href="https://redined.educacion.gob.es/xmlui/bitstream/handle/11162/79803/00820103008137.pdf?sequence=1" target="_blank" rel="noopener">redined</a>)</td>
+                  <td>Spanish counterpart; consult, don&rsquo;t copy</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">ZNO/NMT English programme</th>
+                  <td>25 topics familiar to every Ukrainian school leaver (<a href="https://osvita.ua/test/training/english/55356" target="_blank" rel="noopener">osvita.ua</a>)</td>
+                  <td lang="uk">«Я, моя родина, мої друзі» · «Харчування» · «Подорож»</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="scroll-hint">Scroll the table sideways →</p>
+
+          <h3>Semantic sets cause confusion; scenarios don&rsquo;t</h3>
+          <p>Since Tinkham (1993), studies have found that presenting semantically close words together (kinship terms, colours, foods) <strong>increases the trials needed to learn them and produces confusion errors</strong> (<a href="https://ideals.illinois.edu/items/19069" target="_blank" rel="noopener">Tinkham</a>; <a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.997951/pdf" target="_blank" rel="noopener">Frontiers 2022 review</a>). Erten &amp; Tekin (2008) taught 60 children 80 words and found unrelated sets retained better (<a href="https://acikerisim.comu.edu.tr/items/7a90a159-d648-49ff-aabb-94a7b47c4a5e/full" target="_blank" rel="noopener">ÇOMÜ</a>). The best recent study, Nakata &amp; Suzuki (2019, open access), is more balanced: related words produced <strong>more interference errors during learning (8.22% vs 2.69%, d = 0.86)</strong>, yet <strong>final scores did not differ significantly</strong> (delayed: 21.95% vs 22.54%). Their mini-meta-analysis found related sets need more trials (d = 0.73) but have no significant retention effect, and <strong>spacing cut related-word interference errors from 6.32% to 3.70%</strong> (<a href="https://www.cambridge.org/core/product/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Nakata &amp; Suzuki 2019</a>). Thematic clusters, words tied by a scenario rather than a category, help or at least don&rsquo;t hurt (<a href="https://www.asian-efl-journal.com/main-editions-new/thematic-clustering-in-second-language-vocabulary-learning-scenarios-versus-mental-scenes-development/" target="_blank" rel="noopener">on Tinkham 1997</a>), and story context may offset most of the relatedness penalty (<a href="https://nottingham-repository.worktribe.com/output/17087389/semantic-categories-and-context-in-l2-vocabulary-learning" target="_blank" rel="noopener">Bolger &amp; Zapata 2011</a>).</p>
+          <p class="note"><b>This applies to Kartky&rsquo;s data today.</b> The English family-beginner deck opens with <em>family, mother, father, parents, mom</em>: five near-neighbours in a row, two of them near-synonyms. The fix is not to drop topics but to turn each deck from a category into a <strong>scenario</strong> (a family dinner, a birthday call, an airport check-in), mix nouns with verbs, adjectives and phrases, never place co-hyponyms, synonyms or antonym pairs side by side, and let spacing clear the rest. Easily confused pairs such as Spanish <em>suegro/yerno</em> can carry a &ldquo;commonly confused with&rdquo; note.</p>
+
+          <h3>Frequency should decide which words enter each deck</h3>
+          <p>Nation&rsquo;s coverage study shows the <strong>first 2,000 word families cover about 83–89% of running text</strong>; comfortable unassisted reading needs about 98% coverage, which means 8,000–9,000 families for writing and 6,000–7,000 for speech (<a href="https://www.wgtn.ac.nz/__data/assets/pdf_file/0018/1626120/2006-How-large-a-vocab.pdf" target="_blank" rel="noopener">Nation 2006</a>). Laufer &amp; Ravenhorst-Kalovski place the minimum at 4,000–5,000 families for about 95% (<a href="https://nflrc.hawaii.edu/rfl/item/206" target="_blank" rel="noopener">RFL</a>). Nation also found that treating recurring topic words as known shifts coverage by <strong>&ldquo;well under 0.5%&rdquo;</strong>: general high-frequency words carry coverage, not topic vocabulary. Researchers map size to CEFR levels very differently, so treat these as rough guides:</p>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>Vocabulary size by CEFR band<small>Source: <a href="https://wgtn.ac.nz/lals/resources/paul-nations-resources/vocabulary-lists/vocabulary-cefr-and-word-family-size/vocabulary-and-the-cefr-docx" target="_blank" rel="noopener">Nation, &ldquo;Vocabulary, the CEFR levels, and word family size&rdquo;</a>, reproducing Milton</small></caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">CEFR band</th><th scope="col">Nation (BNC/COCA families)</th><th scope="col">Milton (X-Lex, first 5,000 lemmas)</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row" class="sticky-col">A1</th><td>~120 survival words and phrases</td><td class="num-cell">&lt; 1,500</td></tr>
+                <tr><th scope="row" class="sticky-col">A2</th><td>Most frequent 1,000 families</td><td class="num-cell">1,500–2,500</td></tr>
+                <tr><th scope="row" class="sticky-col">B1</th><td>2,000–3,000</td><td class="num-cell">2,500–3,250</td></tr>
+                <tr><th scope="row" class="sticky-col">B2</th><td>~4,000 (2–3k general + 1–2k topical)</td><td class="num-cell">3,250–3,750</td></tr>
+                <tr><th scope="row" class="sticky-col">C1</th><td>5,000–6,000</td><td class="num-cell">3,750–4,500</td></tr>
+                <tr><th scope="row" class="sticky-col">C2</th><td>7,000–9,000</td><td class="num-cell">4,500–5,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Three topics × three bands × 50 words is <strong>450 words per language, about half of Nation&rsquo;s A2 core</strong>. Beginner decks should draw almost entirely on the first 1,000–2,000 words, intermediate decks mostly on 2,000–5,000, and advanced decks on topical and idiomatic items beyond 5,000. Nation&rsquo;s own model is this hybrid: A1 is a topic-based survival list, and from B2 upward he pairs general high-frequency vocabulary with topic-specific words. No study directly tests &ldquo;highest-frequency-within-topic&rdquo; selection, so this pipeline is an inference from coverage and clustering research.</p>
+          <p><strong>The 50-word set is fine as a container, not as a unit to drill to mastery.</strong> With spacing held equal, studying 20 items whole or in parts of 4 or 10 made little difference (<a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/does-studying-vocabulary-in-smaller-sets-increase-learning/E17B75ABAE1300734AF014C363D59FBC" target="_blank" rel="noopener">Nakata &amp; Webb 2016</a>). One large spaced stack beat several small massed stacks for <strong>90% of learners, while 72% believed the opposite</strong> (<a href="https://cir.nii.ac.jp/crid/1361699994055985152" target="_blank" rel="noopener">Kornell 2009</a>). No research supports a specific number of new words per day; the popular &ldquo;8–10 per lesson&rdquo; has no traceable source (<a href="https://gianfrancoconti.com/2017/01/08/how-many-new-words-should-you-teach-per-lesson-the-wrong-question/" target="_blank" rel="noopener">Conti</a>). A daily new-card limit should be a user setting, offered as a workload control.</p>
+        </section>
+
+        <section id="data" aria-labelledby="data-h">
+          <h2 id="data-h"><span class="num">06</span>Open data exists for every card field, but licences differ sharply</h2>
+          <p class="lede">Kartky ships deck data as static JavaScript, so every source it uses is redistributed. The licence of each source matters more than it would for a server that only looks data up.</p>
+          <p class="scroll-hint">Scroll the table sideways →</p>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>Data sources by card field<small>Verified open licences first; &ldquo;avoid&rdquo; means non-commercial, copyleft, or no open licence found</small></caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">Card field</th><th scope="col">Use</th><th scope="col">Use with care</th><th scope="col">Avoid</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="sticky-col">English word selection &amp; level</th>
+                  <td><strong>CEFR-J</strong> (free incl. commercial, with citation); <strong>Octanove C1–C2</strong> (CC BY-SA 4.0); <strong>NGSL 1.2</strong> (2,809 words) &amp; <strong>NAWL 1.2</strong> (CC BY-SA 4.0)</td>
+                  <td>Nation BNC/COCA lists (no licence stated)</td>
+                  <td>Oxford 3000/5000; English Vocabulary Profile</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Spanish &amp; Ukrainian frequency</th>
+                  <td><strong>wordfreq</strong> and <strong>FrequencyWords</strong> (CC BY-SA 4.0; cover en, es, uk)</td>
+                  <td>SUBTLEX-ESP, EsPal (no licence found); Leipzig (CC BY downloads, NC web data)</td>
+                  <td>PCIC inventories; Davies frequency dictionary</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Definitions &amp; explanations</th>
+                  <td><strong>Open English WordNet</strong> (CC BY 4.0); Spanish MCR wordnet (CC BY 3.0); <strong>Wikidata Lexemes</strong> (CC0)</td>
+                  <td>Wiktionary / kaikki.org (CC BY-SA 4.0 + GFDL; share-alike if edited)</td>
+                  <td>VESUM (CC BY-NC-SA); Apertium &amp; old FreeDict (GPL)</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Example sentences</th>
+                  <td><strong>Tatoeba</strong> (CC BY 2.0 FR; CC0 subset): 2.05M en, 446k es, 189k uk</td>
+                  <td>—</td>
+                  <td>OpenSubtitles sentence text</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Audio</th>
+                  <td><strong>Browser Web Speech API</strong> (nothing redistributed)</td>
+                  <td>Lingua Libre / Commons (CC BY-SA 4.0, per file); Tatoeba audio (per contributor); Piper &ldquo;lada&rdquo; uk voice (Apache 2.0 dataset)</td>
+                  <td>Piper en_US &ldquo;lessac&rdquo; (research-only dataset)</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Images</th>
+                  <td><strong>Twemoji</strong> (CC BY 4.0); <strong>Noto Emoji</strong> (Apache 2.0)</td>
+                  <td>OpenMoji (CC BY-SA 4.0); Unsplash/Pexels (no compiling into a competing service)</td>
+                  <td>ARASAAC (CC BY-NC-SA); Noun Project free tier</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">AI-written content</th>
+                  <td>Own outputs under Anthropic/OpenAI terms, after human review</td>
+                  <td>Needs human review for quality and ownership</td>
+                  <td>Prompting a model to reproduce Wiktionary or Oxford text</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">Sources: <a href="https://github.com/openlanguageprofiles/olp-en-cefrj" target="_blank" rel="noopener">olp-en-cefrj</a>; <a href="https://www.newgeneralservicelist.com/new-general-service-list" target="_blank" rel="noopener">NGSL</a>; <a href="https://www.newgeneralservicelist.com/new-academic-word-list" target="_blank" rel="noopener">NAWL</a>; <a href="https://github.com/rspeer/wordfreq" target="_blank" rel="noopener">wordfreq</a>; <a href="https://github.com/hermitdave/FrequencyWords" target="_blank" rel="noopener">FrequencyWords</a>; <a href="https://github.com/globalwordnet/english-wordnet" target="_blank" rel="noopener">Open English WordNet</a>; <a href="https://omwn.org/omw1.html" target="_blank" rel="noopener">OMW</a>; <a href="https://www.wikidata.org/wiki/Wikidata:Licensing" target="_blank" rel="noopener">Wikidata</a>; <a href="https://en.wiktionary.org/wiki/Wiktionary:Copyrights" target="_blank" rel="noopener">Wiktionary</a>; <a href="https://github.com/brown-uk/dict_uk" target="_blank" rel="noopener">dict_uk</a>; <a href="https://github.com/apertium/apertium-eng-spa" target="_blank" rel="noopener">apertium-eng-spa</a>; <a href="https://tatoeba.org/en/downloads" target="_blank" rel="noopener">Tatoeba downloads</a>; <a href="https://tatoeba.org/en/stats/sentences_by_language" target="_blank" rel="noopener">Tatoeba stats</a>; <a href="https://huggingface.co/rhasspy/piper-voices/blob/main/uk/uk_UA/lada/x_low/MODEL_CARD" target="_blank" rel="noopener">Piper lada</a>; <a href="https://www.cstr.ed.ac.uk/projects/blizzard/2013/lessac_blizzard2013/license.html" target="_blank" rel="noopener">Blizzard lessac licence</a>; <a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a>; <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a>; <a href="https://openmoji.org/faq/" target="_blank" rel="noopener">OpenMoji</a>; <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a>; <a href="https://thenounproject.com/pricing/" target="_blank" rel="noopener">Noun Project</a>; <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Anthropic terms</a>.</p>
+
+          <h3>Notes on the key sources</h3>
+          <ul class="prose-list">
+            <li><strong>CEFR-J is the only verified English source that is both level-tagged and licensed for commercial redistribution.</strong> It should be Kartky&rsquo;s reference for A1–B2 English, with Octanove covering C1–C2 (<a href="https://github.com/openlanguageprofiles/olp-en-cefrj" target="_blank" rel="noopener">olp-en-cefrj</a>).</li>
+            <li><strong>Spanish has no open CEFR-graded list.</strong> Bands will come from wordfreq or FrequencyWords ranks plus Kartky&rsquo;s own judgement, with the PCIC consulted by hand to spot-check. wordfreq requires credits to Google Books, OpenSubtitles and SUBTLEX, and its data is frozen at about 2021 (<a href="https://github.com/rspeer/wordfreq" target="_blank" rel="noopener">wordfreq</a>).</li>
+            <li><strong>Ukrainian lexical data is the weakest link.</strong> Wikidata has about 16,000 Ukrainian lexemes but only <strong>371 Ukrainian senses</strong> (<a href="https://www.wikidata.org/wiki/Wikidata:Lexicographical_data/Statistics/Count_of_lexemes_without_senses" target="_blank" rel="noopener">Wikidata statistics</a>), and VESUM is non-commercial. Ukrainian translations will mostly be Kartky&rsquo;s own work, which strengthens its claim to them.</li>
+            <li><strong>Tatoeba is the natural source of extra sentences.</strong> CC BY 2.0 FR requires attribution but not share-alike, and each sentence has a stable ID linking to its page and author. Store the ID beside any borrowed sentence and generate the credit automatically.</li>
+            <li><strong>Audio is already in good shape.</strong> The pronounce button uses the browser&rsquo;s <code>speechSynthesis</code>, so nothing is redistributed. Voice quality and Ukrainian availability vary by device. If Kartky ever pre-renders audio, check each Piper voice&rsquo;s model card (<a href="https://github.com/rhasspy/piper/blob/master/VOICES.md" target="_blank" rel="noopener">Piper VOICES</a>).</li>
+          </ul>
+
+          <h3>AI-written content and share-alike mechanics</h3>
+          <p>The US Copyright Office&rsquo;s January 2025 report concluded that <strong>prompting alone is not authorship</strong>; human selection, arrangement and modification can be protected (<a href="https://copyrightalliance.org/ai-report-part-2-copyrightability/" target="_blank" rel="noopener">Copyright Alliance</a>). Anthropic&rsquo;s commercial terms assign any rights in outputs to the customer (<a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Anthropic</a>). Ukraine&rsquo;s 2022 law instead creates a separate <strong>25-year sui generis right</strong> for non-original computer-generated objects (Art. 33). Human review of every AI-drafted sentence and translation is both a quality requirement and the basis of any ownership claim.</p>
+          <p><strong>Share-alike applies to adaptations, not to collections.</strong> &ldquo;CC licenses do not require the collection or the compilation itself to be made available under an SA license&rdquo;, and credit can be given via a linked attribution page (<a href="https://creativecommons.org/faq/" target="_blank" rel="noopener">CC FAQ</a>). An unmodified CC BY-SA item stored next to Kartky&rsquo;s own text (an NGSL rank, an OpenMoji emoji) does not make the deck CC BY-SA; an <em>edited</em> item (a reworded Wiktionary definition) does carry the obligation. Whether one JSON file interleaving both counts as a collection is unsettled, so keep share-alike material in clearly labelled separate fields.</p>
+        </section>
+
+        <section id="pitfalls" aria-labelledby="pitfalls-h">
+          <h2 id="pitfalls-h"><span class="num">07</span>Legal pitfalls concentrate in content, not in method</h2>
+          <p class="lede">The biggest trap is one most developers never hear of: <strong>the sui generis database right</strong>.</p>
+          <p>Under the EU Database Directive, a maker who made a &ldquo;substantial investment&rdquo; in obtaining, verifying or presenting a database can block extraction or reuse of a substantial part for <strong>15 years</strong> (<a href="https://eur-lex.europa.eu/eli/dir/1996/9/oj" target="_blank" rel="noopener">EUR-Lex 96/9/EC</a>). Ukraine adopted the same right in 2023 (Art. 21(4)–(8) of Law 2811-IX); its term restarts whenever contents change substantially, and it forbids &ldquo;repeated and systematic extraction&rdquo; of insubstantial parts (<a href="https://zakon.rada.gov.ua/laws/show/2811-20" target="_blank" rel="noopener">zakon.rada.gov.ua</a>). Spain transposes the directive. The US has no such right: after <em>Feist</em>, a frequency-ranked list is thin or unprotected there (<a href="https://supreme.justia.com/cases/federal/us/499/340/" target="_blank" rel="noopener">Justia</a>), though site terms can still bind scrapers. Kartky&rsquo;s audience is in Ukraine and Spain, so the EU/Ukrainian rule is the binding one.</p>
+          <blockquote class="pullquote">A single word, or a single word&rsquo;s CEFR level, is a fact. Copying the Oxford 3000/5000 or the English Vocabulary Profile wholesale, with their CEFR tags, is the risky act.</blockquote>
+          <p>OUP licenses its lists commercially (<a href="https://www.licenseglobal.com/new-mediasocial/cookie-langs-collaborates-oxford-university-press-english-language-learning-app" target="_blank" rel="noopener">License Global</a>), and Cambridge&rsquo;s general terms forbid reproduction without written permission (<a href="https://www.cambridge.org/ereviews/terms-use" target="_blank" rel="noopener">Cambridge terms</a>). The same caution applies to the Instituto Cervantes inventories, Threshold&rsquo;s word lists and shared Quizlet or Memrise decks; Quizlet&rsquo;s &ldquo;copy set&rdquo; is a permission inside the platform, not a licence to export (<a href="https://help.quizlet.com/hc/en-au/articles/360030212131-Editing-sets" target="_blank" rel="noopener">Quizlet Help</a>).</p>
+          <div class="table-wrap">
+            <table class="compact">
+              <caption>The three traps and how to stay clear</caption>
+              <thead>
+                <tr><th scope="col" class="sticky-col">Trap</th><th scope="col">Examples</th><th scope="col">Safe posture</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" class="sticky-col">Database rights</th>
+                  <td>Oxford 3000/5000, English Vocabulary Profile, PCIC inventories, Threshold word lists, competitor decks</td>
+                  <td>Consult by hand; take levels from CEFR-J/Octanove or frequency ranks</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Licence contamination</th>
+                  <td>Non-commercial: VESUM, ARASAAC, Leipzig web data, lessac voice. Copyleft: Apertium, old FreeDict (GPL), Anki code (AGPL)</td>
+                  <td>Accept CC0, CC BY and permissive code (MIT, Apache) plus own and human-reviewed content; quarantine CC BY-SA by field</td>
+                </tr>
+                <tr>
+                  <th scope="row" class="sticky-col">Claims &amp; branding</th>
+                  <td>&ldquo;CEFR-certified&rdquo;, &ldquo;officially aligned&rdquo;, copied mascots, icons, sounds or near-identical look</td>
+                  <td>Say &ldquo;our level estimate&rdquo;; copy mechanics, never trade dress; run a free trademark search for &ldquo;Kartky&rdquo; before any commercial launch</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Whether donations alone count as &ldquo;commercial use&rdquo; under non-commercial licences is ambiguous, which is another reason to avoid them. Anki&rsquo;s AGPL is compatible with an open-source Kartky but rules out a closed version later (<a href="https://raw.githubusercontent.com/ankitects/anki/main/LICENSE" target="_blank" rel="noopener">Anki LICENSE</a>).</p>
+          <p class="note"><b>Open gaps.</b> The exact SM-2 attribution wording was not verified (it matters only if Kartky uses SM-2). The licence terms for the English Vocabulary Profile and the Oxford lists could not be quoted directly, so the advice to avoid them rests on the absence of any open licence rather than on a quoted prohibition.</p>
+        </section>
+
+        <section id="plan" aria-labelledby="plan-h">
+          <h2 id="plan-h"><span class="num">08</span>A concrete build plan for Kartky</h2>
+          <p class="lede">The plan is ordered so the largest learning gain comes first, and every step stays free, browser-only and account-free.</p>
+          <div class="strategy">
+            <p class="eyebrow">The core idea</p>
+            <p>Scheduling first, content second. FSRS in both directions is the change with the biggest payoff and also the cheapest: one MIT-licensed script, a few fields per card and a new localStorage key.</p>
+          </div>
+
+          <div class="tier tier--now">
+            <div class="tier-head">
+              <h3 id="phase-1">Scheduling core</h3><span class="tier-pill">Phase 1</span><small>3 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Scheduler</span>
+                <p class="rec-what">Vendor the ts-fsrs 5.4.2 UMD bundle with its MIT notice. Give each word a stable ID instead of keying progress by the word string. Create two cards per word: L2→UA first, UA→L2 unlocked after the first successful review. Store FSRS state under a new <code>kartky:v2</code> key with retention 0.9, steps 1 min / 10 min, fuzz on.</p>
+                <p class="rec-why"><span>Why:</span> Spacing and retrieval have the largest effects; FSRS is the most accurate open scheduler; practice transfers to the direction practised</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Queues</span>
+                <p class="rec-what">One <strong>&ldquo;Review due&rdquo;</strong> queue across all started decks, sorted by ascending retrievability, with a daily cap. Keep <strong>&ldquo;Learn new&rdquo;</strong> per topic × level, with a user-set daily limit (default 10–20). Pause new cards when the backlog is large.</p>
+                <p class="rec-why"><span>Why:</span> Anki/FSRS backlog guidance; no evidence-based new-word limit exists, so it is a workload setting</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Grading</span>
+                <p class="rec-what">Replace &ldquo;Still learning / I know it&rdquo; with <strong>Again / Good</strong> (optionally Hard / Easy) and prompt &ldquo;think of the answer, then tap&rdquo;. Treat a first-sight &ldquo;I know it&rdquo; as Easy, which still schedules a check. Migrate v1 &ldquo;known&rdquo; words as new cards with an early check rather than inventing stability values.</p>
+                <p class="rec-why"><span>Why:</span> About five spaced retrievals is optimal; learners misjudge their own learning</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tier tier--next">
+            <div class="tier-head">
+              <h3 id="phase-2">Deck content</h3><span class="tier-pill">Phase 2</span><small>3 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Selection</span>
+                <p class="rec-what">Rebuild each deck as scenario sub-groups mixing parts of speech. Check every word against CEFR-J/Octanove (EN) or wordfreq ranks (ES): beginner from the first 1–2k, intermediate 2–5k, advanced 5k+ topical and idiomatic. Shuffle so co-hyponyms and synonyms are never adjacent.</p>
+                <p class="rec-why"><span>Why:</span> Frequency drives coverage; semantic clustering causes interference; spacing reduces it</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Card fields</span>
+                <p class="rec-what">Add a <strong>collocations</strong> line, Spanish gender/article, verb patterns (&ldquo;depend <b>on</b>&rdquo;), register and region tags, &ldquo;commonly confused with&rdquo;, and pronunciation notes for Ukrainian speakers (e.g. /θ/). Rewrite the three examples so they differ in structure and collocate.</p>
+                <p class="rec-why"><span>Why:</span> Collocation instruction d = 1.415; varied informative contexts; Nation&rsquo;s word-knowledge aspects</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Provenance</span>
+                <p class="rec-what">Add a per-word provenance field and a <strong>Credits &amp; licences</strong> page. Label levels &ldquo;our estimate&rdquo;. License Kartky&rsquo;s own content openly, e.g. CC BY 4.0.</p>
+                <p class="rec-why"><span>Why:</span> Attribution mechanics; the Council of Europe does not validate CEFR claims</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tier tier--next">
+            <div class="tier-head">
+              <h3 id="phase-3">Practice modes</h3><span class="tier-pill">Phase 3</span><small>2 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Recall</span>
+                <p class="rec-what">Typed UA→L2 recall with accent-tolerant matching (&ldquo;almost: canción&rdquo;); multiple-choice recognition on a brand-new word&rsquo;s first exposure; cloze from the example sentences; complete-the-chunk (&ldquo;make a ___&rdquo;).</p>
+                <p class="rec-why"><span>Why:</span> Productive recall builds spelling; recognition helps form–meaning early; collocations need explicit practice</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Other strands</span>
+                <p class="rec-what">Ungraded &ldquo;write your own sentence&rdquo;; timed review of known words; optional learner-written memory hook for stubborn words.</p>
+                <p class="rec-why"><span>Why:</span> &ldquo;Evaluation&rdquo; tasks carry the most weight; fluency strand; keyword effects are short-lived, so keep them optional</p>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tier tier--later">
+            <div class="tier-head">
+              <h3 id="phase-4">Growth</h3><span class="tier-pill">Phase 4</span><small>2 items</small>
+            </div>
+            <ol class="recs">
+              <li class="rec">
+                <span class="rec-area">Topics</span>
+                <p class="rec-what">Add topics from the Threshold / ZNO / PCIC overlap: house and home, health, shopping, work, free time, weather.</p>
+                <p class="rec-why"><span>Why:</span> Open theme taxonomies that Ukrainian learners already recognise</p>
+              </li>
+              <li class="rec">
+                <span class="rec-area">Content</span>
+                <p class="rec-what">Pull extra sentences from Tatoeba with stored IDs. Optionally add Twemoji images on the answer side for abstract words.</p>
+                <p class="rec-why"><span>Why:</span> CC BY sentences with automatic credit; pictures help abstract words most</p>
+              </li>
+            </ol>
+          </div>
+
+          <h3>Throughout</h3>
+          <ul class="prose-list">
+            <li>A short, skippable &ldquo;how to study with cards&rdquo; explainer; cards work best when learners are taught to use them.</li>
+            <li>Show progress as words retained, not days used. Any streak should be forgiving (e.g. 5 of 7 days) with no loss framing.</li>
+            <li>Before adding speech scoring, ML distractors, placement tests or image recommendation, self-search Google Patents.</li>
+          </ul>
+          <p><strong>Harder sessions are the point, not a defect.</strong> Bjork&rsquo;s &ldquo;desirable difficulties&rdquo; (spacing, interleaving, retrieval, generation) lower in-session performance while raising long-term retention, and learners still prefer the easier, less effective conditions (<a href="https://www.psychologicalscience.org/observer/desirable-difficulties" target="_blank" rel="noopener">APS Observer</a>). One line in the interface, such as &ldquo;Forgetting a little between reviews makes memory stronger&rdquo;, keeps a learner from reading a hard review as failure. A Northwestern working paper found streak messaging raised platform use among 60,000 students and that loss aversion drives it, but the causal evidence is thin and the mechanism is easy to abuse (<a href="https://www.ipr.northwestern.edu/documents/working-papers/2026/wp-26-05.pdf" target="_blank" rel="noopener">IPR WP-26-05</a>). An FSRS &ldquo;due today&rdquo; count is a learning-aligned nudge that comes free with the scheduler.</p>
+        </section>
+
+        <section id="conclusion" aria-labelledby="conclusion-h">
+          <h2 id="conclusion-h"><span class="num">09</span>Conclusion</h2>
+          <p>The &ldquo;open methodology&rdquo; Kartky is looking for is not a single named system to adopt. It is the public research record on spaced retrieval, plus an open-source scheduler that puts it into practice, and neither copyright nor patent law lets anyone fence that off in Ukraine or the EU.</p>
+          <blockquote class="pullquote">The asset Kartky can build, and own, is a content layer that is frequency-checked, scenario-grouped, collocation-rich and provenance-tracked for Ukrainian speakers.</blockquote>
+          <p>That layer is exactly where the legal risk sits, and it is also where competitors relying on proprietary lists are weakest. Two findings change what a topic-based app should be. First, the topic is a good way to package and motivate study but a weak way to choose words and a risky way to sequence them. Second, the change with the largest learning payoff, FSRS scheduling in both directions, is also the cheapest to build. The remaining uncertainties (exact meta-analytic effect sizes, Oxford and EVP licensing, the lack of an open CEFR-graded Spanish list, Ukrainian voice quality in browsers) are real but bounded, and none of them blocks Phase 1.</p>
+        </section>
+
+        <section id="sources" class="sources" aria-labelledby="sources-h">
+          <h2 id="sources-h"><span class="num">10</span>Sources</h2>
+          <p>Sources cited in the report, grouped by subject. Several paywalled papers were read through abstracts or secondary summaries; this is noted where it matters in the text.</p>
+          <h3>Law, patents &amp; trademarks</h3>
+          <ol start="1">
+            <li><a href="https://zakon.rada.gov.ua/laws/show/2811-20" target="_blank" rel="noopener">Law of Ukraine No. 2811-IX on copyright and related rights</a> <span class="host">zakon.rada.gov.ua</span></li>
+            <li><a href="https://zakon.rada.gov.ua/laws/show/3687-12" target="_blank" rel="noopener">Law of Ukraine No. 3687-XII on inventions and utility models</a> <span class="host">zakon.rada.gov.ua</span></li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/17/102" target="_blank" rel="noopener">17 U.S.C. §102</a> <span class="host">law.cornell.edu</span></li>
+            <li><a href="https://supreme.justia.com/cases/federal/us/101/99/" target="_blank" rel="noopener">Baker v. Selden (1879)</a> <span class="host">justia.com</span></li>
+            <li><a href="https://supreme.justia.com/cases/federal/us/573/208/" target="_blank" rel="noopener">Alice v. CLS Bank (2014)</a> <span class="host">justia.com</span></li>
+            <li><a href="https://supreme.justia.com/cases/federal/us/499/340/" target="_blank" rel="noopener">Feist v. Rural (1991)</a> <span class="host">justia.com</span></li>
+            <li><a href="https://eur-lex.europa.eu/eli/dir/2009/24/oj" target="_blank" rel="noopener">Software Directive 2009/24/EC</a> <span class="host">eur-lex.europa.eu</span></li>
+            <li><a href="https://eur-lex.europa.eu/eli/dir/1996/9/oj" target="_blank" rel="noopener">Database Directive 96/9/EC</a> <span class="host">eur-lex.europa.eu</span></li>
+            <li><a href="https://curia.europa.eu/juris/liste.jsf?num=C-406/10" target="_blank" rel="noopener">SAS Institute v World Programming, C-406/10</a> <span class="host">curia.europa.eu</span></li>
+            <li><a href="https://www.epo.org/en/legal/epc/2020/a52.html" target="_blank" rel="noopener">EPC Article 52</a> <span class="host">epo.org</span></li>
+            <li><a href="https://patents.google.com/patent/US6652283B1/en" target="_blank" rel="noopener">US6652283B1 (Cerego, expired)</a> <span class="host">patents.google.com</span></li>
+            <li><a href="https://patents.google.com/patent/US20120322043A1/en" target="_blank" rel="noopener">US20120322043A1 (Microsoft, abandoned)</a> <span class="host">patents.google.com</span></li>
+            <li><a href="https://patents.google.com/patent/US11288976B2/en" target="_blank" rel="noopener">US11288976B2 (Fluent Forever)</a> <span class="host">patents.google.com</span></li>
+            <li><a href="https://patents.google.com/?assignee=Rosetta+Stone" target="_blank" rel="noopener">Rosetta Stone patents</a> <span class="host">patents.google.com</span></li>
+            <li><a href="https://patents.google.com/?assignee=Quizlet" target="_blank" rel="noopener">Quizlet patents</a> <span class="host">patents.google.com</span></li>
+            <li><a href="https://ipwatchdog.com/2015/06/27/freedom-to-operate-knowing-if-you-will-likely-infringe-a-patent/id=59081/" target="_blank" rel="noopener">IPWatchdog — freedom to operate</a> <span class="host">ipwatchdog.com</span></li>
+            <li><a href="https://www.ukbusinessforums.co.uk/threads/general-patent-advice.222275/post-1737202" target="_blank" rel="noopener">UK Business Forums — patent advice costs</a> <span class="host">ukbusinessforums.co.uk</span></li>
+            <li><a href="https://trademark.justia.com/744/53/pimsleur-74453021.html" target="_blank" rel="noopener">PIMSLEUR trademark</a> <span class="host">trademark.justia.com</span></li>
+            <li><a href="https://michelthomas.com/landing-page/michel-thomas-products/" target="_blank" rel="noopener">Michel Thomas products</a> <span class="host">michelthomas.com</span></li>
+            <li><a href="https://www.coe.int/web/common-european-framework-reference-languages/contact-form-for-translation-request" target="_blank" rel="noopener">CoE — CEFR reproduction requests</a> <span class="host">coe.int</span></li>
+            <li><a href="https://www.coe.int/fr/web/portal/copyright-licensing-permissions" target="_blank" rel="noopener">CoE — copyright policy</a> <span class="host">coe.int</span></li>
+            <li><a href="https://www.coe.int/en/web/common-european-framework-reference-languages/responsability-of-member-states" target="_blank" rel="noopener">CoE — responsibility for CEFR linking claims</a> <span class="host">coe.int</span></li>
+            <li><a href="https://www.coe.int/en/web/common-european-framework-reference-languages/additional-material" target="_blank" rel="noopener">CoE — further material</a> <span class="host">coe.int</span></li>
+            <li><a href="https://www.licenseglobal.com/new-mediasocial/cookie-langs-collaborates-oxford-university-press-english-language-learning-app" target="_blank" rel="noopener">License Global — OUP list licensing</a> <span class="host">licenseglobal.com</span></li>
+            <li><a href="https://www.cambridge.org/ereviews/terms-use" target="_blank" rel="noopener">Cambridge terms of use</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://help.quizlet.com/hc/en-au/articles/360030212131-Editing-sets" target="_blank" rel="noopener">Quizlet Help — editing sets</a> <span class="host">help.quizlet.com</span></li>
+            <li><a href="https://copyrightalliance.org/ai-report-part-2-copyrightability/" target="_blank" rel="noopener">Copyright Alliance — USCO AI report part 2</a> <span class="host">copyrightalliance.org</span></li>
+            <li><a href="https://creativecommons.org/faq/" target="_blank" rel="noopener">Creative Commons FAQ</a> <span class="host">creativecommons.org</span></li>
+          </ol>
+          <h3>Spaced repetition &amp; scheduling</h3>
+          <ol start="29">
+            <li><a href="https://www.supermemo.com/en/blog/licensing-and-copyrighting-of-supermemo-algorithms" target="_blank" rel="noopener">SuperMemo — licensing of SuperMemo algorithms</a> <span class="host">supermemo.com</span></li>
+            <li><a href="https://preview.aclanthology.org/fix_video/P16-1174.pdf" target="_blank" rel="noopener">Settles &amp; Meeder 2016 — half-life regression</a> <span class="host">aclanthology.org</span></li>
+            <li><a href="https://github.com/duolingo/halflife-regression" target="_blank" rel="noopener">duolingo/halflife-regression</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/ankitects/anki/blob/main/LICENSE" target="_blank" rel="noopener">Anki LICENSE (AGPL-3.0)</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/open-spaced-repetition/srs-benchmark" target="_blank" rel="noopener">srs-benchmark</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/open-spaced-repetition/awesome-fsrs/wiki/ABC-of-FSRS" target="_blank" rel="noopener">ABC of FSRS</a> <span class="host">github.com</span></li>
+            <li><a href="https://changes.ankiweb.net/changes/23.10.html" target="_blank" rel="noopener">Anki 23.10 changelog</a> <span class="host">ankiweb.net</span></li>
+            <li><a href="https://github.com/open-spaced-repetition/ts-fsrs" target="_blank" rel="noopener">ts-fsrs</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/open-spaced-repetition/ts-fsrs/blob/main/packages/fsrs/README.md" target="_blank" rel="noopener">ts-fsrs README</a> <span class="host">github.com</span></li>
+            <li><a href="https://registry.npmjs.org/ts-fsrs" target="_blank" rel="noopener">ts-fsrs on the npm registry</a> <span class="host">npmjs.org</span></li>
+            <li><a href="https://github.com/fasiha/ebisu" target="_blank" rel="noopener">Ebisu</a> <span class="host">github.com</span></li>
+            <li><a href="https://docs.ankiweb.net/deck-options.html" target="_blank" rel="noopener">Anki manual — deck options</a> <span class="host">ankiweb.net</span></li>
+          </ol>
+          <h3>Learning science</h3>
+          <ol start="41">
+            <li><a href="https://pubmed.ncbi.nlm.nih.gov/16719566/" target="_blank" rel="noopener">Cepeda et al. 2006 — distributed practice</a> <span class="host">pubmed.ncbi.nlm.nih.gov</span></li>
+            <li><a href="https://onlinelibrary.wiley.com/doi/full/10.1111/lang.12479" target="_blank" rel="noopener">Kim &amp; Webb 2022 — spacing meta-analysis</a> <span class="host">wiley.com</span></li>
+            <li><a href="https://ir.lib.uwo.ca/etd/8600/" target="_blank" rel="noopener">Western University ETD 8600</a> <span class="host">ir.lib.uwo.ca</span></li>
+            <li><a href="https://pressto.amu.edu.pl/index.php/ssllt/article/view/49487" target="_blank" rel="noopener">SSLLT review</a> <span class="host">pressto.amu.edu.pl</span></li>
+            <li><a href="https://www.brucehayes.org/Teaching/papers/2008_Roediger_Karpicke_Science.pdf" target="_blank" rel="noopener">Karpicke &amp; Roediger 2008 (Science)</a> <span class="host">brucehayes.org</span></li>
+            <li><a href="https://www.purdue.edu/uns/x/2008a/080214KarpickeTest.html" target="_blank" rel="noopener">Purdue news release</a> <span class="host">purdue.edu</span></li>
+            <li><a href="https://nonpf.confex.com/nonpf/2014co/webprogram/Handout/Session3922/FridayPlenaryLarsenHandout.pdf" target="_blank" rel="noopener">Larsen handout (secondary)</a> <span class="host">confex.com</span></li>
+            <li><a href="https://sites.lifesci.ucla.edu/psych-bjorklab/wp-content/uploads/sites/13/2016/11/soderstrom_kerr.pdf" target="_blank" rel="noopener">Soderstrom, Kerr &amp; Bjork</a> <span class="host">ucla.edu</span></li>
+            <li><a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/does-repeated-practice-make-perfect-the-effects-of-withinsession-repeated-retrieval-on-second-language-vocabulary-learning/F14BA8A576CD2563D14CEA46E35D842E" target="_blank" rel="noopener">Nakata 2017 — repeated retrieval</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://listserv.linguistlist.org/pipermail/linguist/2013-September/065329.html" target="_blank" rel="noopener">Nakata 2013 thesis abstract</a> <span class="host">linguistlist.org</span></li>
+            <li><a href="https://www.redalyc.org/pdf/3398/339829651005.pdf" target="_blank" rel="noopener">Steinel, Hulstijn &amp; Steinel — direction effects</a> <span class="host">redalyc.org</span></li>
+            <li><a href="https://www.degruyterbrill.com/document/doi/10.1515/iral-2015-0022/html?lang=en" target="_blank" rel="noopener">Webb — receptive vs productive (IRAL)</a> <span class="host">degruyterbrill.com</span></li>
+            <li><a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.984211/full" target="_blank" rel="noopener">Frontiers 2022 — word-card synthesis</a> <span class="host">frontiersin.org</span></li>
+            <li><a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/S0261444822000507" target="_blank" rel="noopener">Webb, Uchihara &amp; Yanagisawa 2023</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://www.lextutor.ca/freq/lists_download/elgort_2011.pdf" target="_blank" rel="noopener">Elgort 2011</a> <span class="host">lextutor.ca</span></li>
+            <li><a href="https://cronfa.swan.ac.uk/Record/cronfa16614/Details" target="_blank" rel="noopener">Hennebry et al. — L1 vs L2 glosses</a> <span class="host">swan.ac.uk</span></li>
+            <li><a href="https://prism.ucalgary.ca/handle/11023/980" target="_blank" rel="noopener">University of Calgary thesis</a> <span class="host">ucalgary.ca</span></li>
+            <li><a href="https://observatorio-cientifico.ua.es/documentos/652984f9993b0007e5d7c612?lang=fr" target="_blank" rel="noopener">Universidad de Alicante study</a> <span class="host">ua.es</span></li>
+            <li><a href="https://www.researchbank.ac.nz/server/api/core/bitstreams/4e43762f-32ea-4ae1-beb0-7d343abdfd3b/content" target="_blank" rel="noopener">Jahangard 2022</a> <span class="host">researchbank.ac.nz</span></li>
+            <li><a href="https://ae.fl.kpi.ua/article/view/250501/258676" target="_blank" rel="noopener">KPI article citing Webb 2007</a> <span class="host">kpi.ua</span></li>
+            <li><a href="https://www.degruyterbrill.com/document/doi/10.1515/iral-2021-0218/html" target="_blank" rel="noopener">Collocation instruction meta-analysis (IRAL)</a> <span class="host">degruyterbrill.com</span></li>
+            <li><a href="https://dermatology.cdlib.org/content/qt9hs2k98v/qt9hs2k98v.pdf?t=pkpchn" target="_blank" rel="noopener">Collocation acquisition study</a> <span class="host">cdlib.org</span></li>
+            <li><a href="https://iro.uiowa.edu/esploro/outputs/journalArticle/Imagery-and-verbal-coding-approaches-in/9984397917102771" target="_blank" rel="noopener">Shen — imagery and verbal coding</a> <span class="host">uiowa.edu</span></li>
+            <li><a href="https://osf.io/st4dn" target="_blank" rel="noopener">Carpenter &amp; Geller — picture overconfidence</a> <span class="host">osf.io</span></li>
+            <li><a href="https://stars.library.ucf.edu/facultybib1990/601" target="_blank" rel="noopener">Wang, Thomas &amp; Ouellette — keyword method</a> <span class="host">ucf.edu</span></li>
+            <li><a href="https://ejournals.swu.ac.th/index.php/hm/article/view/3061/3080" target="_blank" rel="noopener">Four Strands overview</a> <span class="host">swu.ac.th</span></li>
+            <li><a href="https://www.cambridge.org/core/services/aop-cambridge-core/content/view/5C5984B326F37FBF3A3DDA3C0EB2996C/S0272263121000577a.pdf/involvement-load-hypothesis-plus-creating-an-improved-predictive-model-of-incidental-vocabulary-learning.pdf" target="_blank" rel="noopener">Yanagisawa &amp; Webb 2021 — Involvement Load Hypothesis Plus</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9598591/" target="_blank" rel="noopener">Liu &amp; Reynolds 2022</a> <span class="host">pmc.ncbi.nlm.nih.gov</span></li>
+            <li><a href="https://www.psychologicalscience.org/observer/desirable-difficulties" target="_blank" rel="noopener">APS Observer — desirable difficulties</a> <span class="host">psychologicalscience.org</span></li>
+            <li><a href="https://www.ipr.northwestern.edu/documents/working-papers/2026/wp-26-05.pdf" target="_blank" rel="noopener">Northwestern IPR WP-26-05 — streaks</a> <span class="host">northwestern.edu</span></li>
+          </ol>
+          <h3>Topics, clustering &amp; frequency</h3>
+          <ol start="71">
+            <li><a href="https://ecml.at/Portals/1/3MTP/ECEP/training-kit/PageEN/P/Worksheet_B_Domains.pdf" target="_blank" rel="noopener">ECML — CEFR domains worksheet</a> <span class="host">ecml.at</span></li>
+            <li><a href="https://www.cambridge.org/core/books/threshold-1990/specific-notions/65A192D134F9E24DC236BE2A06D2ED18" target="_blank" rel="noopener">Threshold 1990 — specific notions</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://ebuah.uah.es/xmlui/handle/10017/30241" target="_blank" rel="noopener">Universidad de Alcalá — PCIC</a> <span class="host">uah.es</span></li>
+            <li><a href="https://redined.educacion.gob.es/xmlui/bitstream/handle/11162/79803/00820103008137.pdf?sequence=1" target="_blank" rel="noopener">redined — PCIC overview</a> <span class="host">educacion.gob.es</span></li>
+            <li><a href="https://osvita.ua/test/training/english/55356" target="_blank" rel="noopener">ZNO/NMT English programme topics</a> <span class="host">osvita.ua</span></li>
+            <li><a href="https://ideals.illinois.edu/items/19069" target="_blank" rel="noopener">Tinkham 1993</a> <span class="host">illinois.edu</span></li>
+            <li><a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.997951/pdf" target="_blank" rel="noopener">Frontiers 2022 — clustering review</a> <span class="host">frontiersin.org</span></li>
+            <li><a href="https://acikerisim.comu.edu.tr/items/7a90a159-d648-49ff-aabb-94a7b47c4a5e/full" target="_blank" rel="noopener">Erten &amp; Tekin 2008</a> <span class="host">comu.edu.tr</span></li>
+            <li><a href="https://www.cambridge.org/core/product/F58BA8D70385603B9C42E408BFCB8A10" target="_blank" rel="noopener">Nakata &amp; Suzuki 2019 (SSLA, open access)</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://www.asian-efl-journal.com/main-editions-new/thematic-clustering-in-second-language-vocabulary-learning-scenarios-versus-mental-scenes-development/" target="_blank" rel="noopener">Asian EFL Journal — thematic clustering</a> <span class="host">asian-efl-journal.com</span></li>
+            <li><a href="https://nottingham-repository.worktribe.com/output/17087389/semantic-categories-and-context-in-l2-vocabulary-learning" target="_blank" rel="noopener">Bolger &amp; Zapata 2011</a> <span class="host">nottingham.ac.uk</span></li>
+            <li><a href="https://www.wgtn.ac.nz/__data/assets/pdf_file/0018/1626120/2006-How-large-a-vocab.pdf" target="_blank" rel="noopener">Nation 2006 — How large a vocabulary</a> <span class="host">wgtn.ac.nz</span></li>
+            <li><a href="https://nflrc.hawaii.edu/rfl/item/206" target="_blank" rel="noopener">Laufer &amp; Ravenhorst-Kalovski 2010</a> <span class="host">hawaii.edu</span></li>
+            <li><a href="https://wgtn.ac.nz/lals/resources/paul-nations-resources/vocabulary-lists/vocabulary-cefr-and-word-family-size/vocabulary-and-the-cefr-docx" target="_blank" rel="noopener">Nation — vocabulary and the CEFR</a> <span class="host">wgtn.ac.nz</span></li>
+            <li><a href="https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/does-studying-vocabulary-in-smaller-sets-increase-learning/E17B75ABAE1300734AF014C363D59FBC" target="_blank" rel="noopener">Nakata &amp; Webb 2016 — set size</a> <span class="host">cambridge.org</span></li>
+            <li><a href="https://cir.nii.ac.jp/crid/1361699994055985152" target="_blank" rel="noopener">Kornell 2009 — stack size</a> <span class="host">nii.ac.jp</span></li>
+            <li><a href="https://gianfrancoconti.com/2017/01/08/how-many-new-words-should-you-teach-per-lesson-the-wrong-question/" target="_blank" rel="noopener">Conti — words per lesson</a> <span class="host">gianfrancoconti.com</span></li>
+          </ol>
+          <h3>Open data sources</h3>
+          <ol start="88">
+            <li><a href="https://github.com/openlanguageprofiles/olp-en-cefrj" target="_blank" rel="noopener">CEFR-J vocabulary profile (olp-en-cefrj)</a> <span class="host">github.com</span></li>
+            <li><a href="https://www.newgeneralservicelist.com/new-general-service-list" target="_blank" rel="noopener">New General Service List</a> <span class="host">newgeneralservicelist.com</span></li>
+            <li><a href="https://www.newgeneralservicelist.com/new-academic-word-list" target="_blank" rel="noopener">New Academic Word List</a> <span class="host">newgeneralservicelist.com</span></li>
+            <li><a href="https://github.com/rspeer/wordfreq" target="_blank" rel="noopener">wordfreq</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/hermitdave/FrequencyWords" target="_blank" rel="noopener">FrequencyWords</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/globalwordnet/english-wordnet" target="_blank" rel="noopener">Open English WordNet</a> <span class="host">github.com</span></li>
+            <li><a href="https://omwn.org/omw1.html" target="_blank" rel="noopener">Open Multilingual Wordnet</a> <span class="host">omwn.org</span></li>
+            <li><a href="https://www.wikidata.org/wiki/Wikidata:Licensing" target="_blank" rel="noopener">Wikidata licensing</a> <span class="host">wikidata.org</span></li>
+            <li><a href="https://www.wikidata.org/wiki/Wikidata:Lexicographical_data/Statistics/Count_of_lexemes_without_senses" target="_blank" rel="noopener">Wikidata lexeme statistics</a> <span class="host">wikidata.org</span></li>
+            <li><a href="https://en.wiktionary.org/wiki/Wiktionary:Copyrights" target="_blank" rel="noopener">Wiktionary copyrights</a> <span class="host">wiktionary.org</span></li>
+            <li><a href="https://github.com/brown-uk/dict_uk" target="_blank" rel="noopener">dict_uk (VESUM)</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/apertium/apertium-eng-spa" target="_blank" rel="noopener">apertium-eng-spa</a> <span class="host">github.com</span></li>
+            <li><a href="https://tatoeba.org/en/downloads" target="_blank" rel="noopener">Tatoeba downloads</a> <span class="host">tatoeba.org</span></li>
+            <li><a href="https://tatoeba.org/en/stats/sentences_by_language" target="_blank" rel="noopener">Tatoeba sentence statistics</a> <span class="host">tatoeba.org</span></li>
+            <li><a href="https://github.com/rhasspy/piper/blob/master/VOICES.md" target="_blank" rel="noopener">Piper voices</a> <span class="host">github.com</span></li>
+            <li><a href="https://huggingface.co/rhasspy/piper-voices/blob/main/uk/uk_UA/lada/x_low/MODEL_CARD" target="_blank" rel="noopener">Piper &ldquo;lada&rdquo; model card</a> <span class="host">huggingface.co</span></li>
+            <li><a href="https://www.cstr.ed.ac.uk/projects/blizzard/2013/lessac_blizzard2013/license.html" target="_blank" rel="noopener">Blizzard 2013 Lessac licence</a> <span class="host">ed.ac.uk</span></li>
+            <li><a href="https://github.com/jdecked/twemoji" target="_blank" rel="noopener">Twemoji</a> <span class="host">github.com</span></li>
+            <li><a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Emoji</a> <span class="host">github.com</span></li>
+            <li><a href="https://openmoji.org/faq/" target="_blank" rel="noopener">OpenMoji FAQ</a> <span class="host">openmoji.org</span></li>
+            <li><a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash licence</a> <span class="host">unsplash.com</span></li>
+            <li><a href="https://thenounproject.com/pricing/" target="_blank" rel="noopener">Noun Project pricing</a> <span class="host">thenounproject.com</span></li>
+            <li><a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Anthropic commercial terms</a> <span class="host">anthropic.com</span></li>
+          </ol>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="r-foot">
+    <span>Kartky &middot; Learning methodology &middot; Updated October 2026 &middot; Not legal advice</span>
+    <span class="foot-links"><a href="./research.html">Market research</a><a href="./index.html">Back to flashcards</a></span>
+  </footer>
+</body>
+</html>
